@@ -1,0 +1,26 @@
+model Island {
+  id              String         @id @default(cuid())
+  islandName      String
+  unlockOrder     Int
+  isLockedDefault Boolean        @default(true)
+
+  stories         Story[]
+  userProgress    UserProgress[]
+
+  @@map("islands")
+}
+
+model UserProgress {
+  id          String  @id @default(cuid())
+  userId      String
+  islandId    String
+  isUnlocked  Boolean @default(false)
+  isCompleted Boolean @default(false)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  island Island @relation(fields: [islandId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([islandId])
+  @@map("user_progress")
+}

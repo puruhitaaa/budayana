@@ -1,0 +1,56 @@
+enum StoryType {
+  STATIC
+  INTERACTIVE
+}
+
+enum SlideType {
+  IMAGE
+  GAME
+  ESSAY
+}
+
+model Story {
+  id        String    @id @default(cuid())
+  islandId  String
+  title     String
+  storyType StoryType
+
+  island            Island             @relation(fields: [islandId], references: [id], onDelete: Cascade)
+  staticSlides      StaticSlide[]
+  interactiveSlides InteractiveSlide[]
+  questions         Question[]
+  storyAttempts     StoryAttempt[]
+
+  @@index([islandId])
+  @@map("stories")
+}
+
+model StaticSlide {
+  id          String  @id @default(cuid())
+  storyId     String
+  slideNumber Int
+  contentText String?
+  imageUrl    String?
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@index([storyId])
+  @@map("static_slide")
+}
+
+model InteractiveSlide {
+  id          String    @id @default(cuid())
+  storyId     String
+  questionId  String?
+  slideNumber Int
+  slideType   SlideType
+  imageUrl    String?
+  contentText String?
+
+  story    Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  question Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+
+  @@index([storyId])
+  @@index([questionId])
+  @@map("interactive_slide")
+}

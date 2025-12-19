@@ -9,6 +9,16 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  // Gamification fields
+  grade         Int
+  username      String    @unique
+  guardianEmail String?
+  totalXp       Int       @default(0)
+
+  // Gamification relations
+  userProgress  UserProgress[]
+  storyAttempts StoryAttempt[]
+
   @@unique([email])
   @@map("user")
 }

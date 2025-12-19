@@ -9,7 +9,46 @@
 * 🟢 You can import this file directly.
 */
 
+export const AttemptStageType = {
+  PRE_TEST: 'PRE_TEST',
+  STORY: 'STORY',
+  POST_TEST: 'POST_TEST'
+} as const
+
+export type AttemptStageType = (typeof AttemptStageType)[keyof typeof AttemptStageType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const StageType = {
+  PRE_TEST: 'PRE_TEST',
+  POST_TEST: 'POST_TEST',
+  INTERACTIVE: 'INTERACTIVE'
+} as const
+
+export type StageType = (typeof StageType)[keyof typeof StageType]
+
+
+export const QuestionType = {
+  MCQ: 'MCQ',
+  TRUE_FALSE: 'TRUE_FALSE',
+  DRAG_DROP: 'DRAG_DROP',
+  ESSAY: 'ESSAY'
+} as const
+
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
+
+
+export const StoryType = {
+  STATIC: 'STATIC',
+  INTERACTIVE: 'INTERACTIVE'
+} as const
+
+export type StoryType = (typeof StoryType)[keyof typeof StoryType]
+
+
+export const SlideType = {
+  IMAGE: 'IMAGE',
+  GAME: 'GAME',
+  ESSAY: 'ESSAY'
+} as const
+
+export type SlideType = (typeof SlideType)[keyof typeof SlideType]

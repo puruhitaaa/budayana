@@ -18,6 +18,21 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
+ * Model StoryAttempt
+ * 
+ */
+export type StoryAttempt = Prisma.StoryAttemptModel
+/**
+ * Model StageAttempt
+ * 
+ */
+export type StageAttempt = Prisma.StageAttemptModel
+/**
+ * Model QuestionAttemptLog
+ * 
+ */
+export type QuestionAttemptLog = Prisma.QuestionAttemptLogModel
+/**
  * Model User
  * 
  */
@@ -37,3 +52,38 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Island
+ * 
+ */
+export type Island = Prisma.IslandModel
+/**
+ * Model UserProgress
+ * 
+ */
+export type UserProgress = Prisma.UserProgressModel
+/**
+ * Model Question
+ * 
+ */
+export type Question = Prisma.QuestionModel
+/**
+ * Model AnswerOption
+ * 
+ */
+export type AnswerOption = Prisma.AnswerOptionModel
+/**
+ * Model Story
+ * 
+ */
+export type Story = Prisma.StoryModel
+/**
+ * Model StaticSlide
+ * 
+ */
+export type StaticSlide = Prisma.StaticSlideModel
+/**
+ * Model InteractiveSlide
+ * 
+ */
+export type InteractiveSlide = Prisma.InteractiveSlideModel

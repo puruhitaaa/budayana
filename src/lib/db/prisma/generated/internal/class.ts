@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "model User {\n  id            String    @id\n  name          String\n  email         String\n  emailVerified Boolean   @default(false)\n  image         String?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  sessions      Session[]\n  accounts      Account[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@index([userId])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map(\"verification\")\n}\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../generated\"\n  moduleFormat = \"esm\"\n  runtime      = \"bun\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n",
+  "inlineSchema": "enum AttemptStageType {\n  PRE_TEST\n  STORY\n  POST_TEST\n}\n\nmodel StoryAttempt {\n  id                    String    @id @default(cuid())\n  userId                String\n  storyId               String\n  startedAt             DateTime  @default(now())\n  finishedAt            DateTime?\n  totalTimeSeconds      Int       @default(0)\n  totalXpGained         Int       @default(0)\n  preTestScore          Decimal?  @db.Decimal(5, 2)\n  postTestScore         Decimal?  @db.Decimal(5, 2)\n  correctInteractiveCnt Int?\n  wrongInteractiveCnt   Int?\n  essayAnswer           String?\n\n  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)\n  story         Story                @relation(fields: [storyId], references: [id], onDelete: Cascade)\n  stageAttempts StageAttempt[]\n  questionLogs  QuestionAttemptLog[]\n\n  @@index([userId])\n  @@index([storyId])\n  @@map(\"story_attempts\")\n}\n\nmodel StageAttempt {\n  id               String           @id @default(cuid())\n  attemptId        String\n  stageType        AttemptStageType\n  timeSpentSeconds Int              @default(0)\n  xpGained         Int              @default(0)\n  score            Decimal?         @db.Decimal(5, 2)\n\n  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)\n\n  @@index([attemptId])\n  @@map(\"stage_attempts\")\n}\n\nmodel QuestionAttemptLog {\n  id             String   @id @default(cuid())\n  attemptId      String\n  questionId     String\n  userAnswerText String?\n  isCorrect      Boolean?\n  attemptCount   Int      @default(1)\n  answeredAt     DateTime @default(now())\n\n  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)\n  question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)\n\n  @@index([attemptId])\n  @@index([questionId])\n  @@map(\"question_attempts_logs\")\n}\n\nmodel User {\n  id            String    @id\n  name          String\n  email         String\n  emailVerified Boolean   @default(false)\n  image         String?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  sessions      Session[]\n  accounts      Account[]\n\n  // Gamification fields\n  grade         Int\n  username      String  @unique\n  guardianEmail String?\n  totalXp       Int     @default(0)\n\n  // Gamification relations\n  userProgress  UserProgress[]\n  storyAttempts StoryAttempt[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@index([userId])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map(\"verification\")\n}\n\nmodel Island {\n  id              String  @id @default(cuid())\n  islandName      String\n  unlockOrder     Int\n  isLockedDefault Boolean @default(true)\n\n  stories      Story[]\n  userProgress UserProgress[]\n\n  @@map(\"islands\")\n}\n\nmodel UserProgress {\n  id          String  @id @default(cuid())\n  userId      String\n  islandId    String\n  isUnlocked  Boolean @default(false)\n  isCompleted Boolean @default(false)\n\n  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)\n  island Island @relation(fields: [islandId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([islandId])\n  @@map(\"user_progress\")\n}\n\nenum StageType {\n  PRE_TEST\n  POST_TEST\n  INTERACTIVE\n}\n\nenum QuestionType {\n  MCQ\n  TRUE_FALSE\n  DRAG_DROP\n  ESSAY\n}\n\nmodel Question {\n  id           String       @id @default(cuid())\n  storyId      String\n  stageType    StageType\n  questionType QuestionType\n  questionText String\n  xpValue      Int          @default(0)\n\n  story             Story                @relation(fields: [storyId], references: [id], onDelete: Cascade)\n  answerOptions     AnswerOption[]\n  interactiveSlides InteractiveSlide[]\n  attemptLogs       QuestionAttemptLog[]\n\n  @@index([storyId])\n  @@map(\"questions\")\n}\n\nmodel AnswerOption {\n  id         String  @id @default(cuid())\n  questionId String\n  optionText String\n  isCorrect  Boolean @default(false)\n\n  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)\n\n  @@index([questionId])\n  @@map(\"answer_option\")\n}\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../generated\"\n  moduleFormat = \"esm\"\n  runtime      = \"bun\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum StoryType {\n  STATIC\n  INTERACTIVE\n}\n\nenum SlideType {\n  IMAGE\n  GAME\n  ESSAY\n}\n\nmodel Story {\n  id        String    @id @default(cuid())\n  islandId  String\n  title     String\n  storyType StoryType\n\n  island            Island             @relation(fields: [islandId], references: [id], onDelete: Cascade)\n  staticSlides      StaticSlide[]\n  interactiveSlides InteractiveSlide[]\n  questions         Question[]\n  storyAttempts     StoryAttempt[]\n\n  @@index([islandId])\n  @@map(\"stories\")\n}\n\nmodel StaticSlide {\n  id          String  @id @default(cuid())\n  storyId     String\n  slideNumber Int\n  contentText String?\n  imageUrl    String?\n\n  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)\n\n  @@index([storyId])\n  @@map(\"static_slide\")\n}\n\nmodel InteractiveSlide {\n  id          String    @id @default(cuid())\n  storyId     String\n  questionId  String?\n  slideNumber Int\n  slideType   SlideType\n  imageUrl    String?\n  contentText String?\n\n  story    Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)\n  question Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)\n\n  @@index([storyId])\n  @@index([questionId])\n  @@map(\"interactive_slide\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"}],\"dbName\":\"user\"},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":\"session\"},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"refreshTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"account\"},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"verification\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"StoryAttempt\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"finishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"totalTimeSeconds\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"totalXpGained\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"preTestScore\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"postTestScore\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"correctInteractiveCnt\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"wrongInteractiveCnt\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"essayAnswer\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"StoryAttemptToUser\"},{\"name\":\"story\",\"kind\":\"object\",\"type\":\"Story\",\"relationName\":\"StoryToStoryAttempt\"},{\"name\":\"stageAttempts\",\"kind\":\"object\",\"type\":\"StageAttempt\",\"relationName\":\"StageAttemptToStoryAttempt\"},{\"name\":\"questionLogs\",\"kind\":\"object\",\"type\":\"QuestionAttemptLog\",\"relationName\":\"QuestionAttemptLogToStoryAttempt\"}],\"dbName\":\"story_attempts\"},\"StageAttempt\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attemptId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stageType\",\"kind\":\"enum\",\"type\":\"AttemptStageType\"},{\"name\":\"timeSpentSeconds\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"xpGained\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"score\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"storyAttempt\",\"kind\":\"object\",\"type\":\"StoryAttempt\",\"relationName\":\"StageAttemptToStoryAttempt\"}],\"dbName\":\"stage_attempts\"},\"QuestionAttemptLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"attemptId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAnswerText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isCorrect\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"attemptCount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"answeredAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"storyAttempt\",\"kind\":\"object\",\"type\":\"StoryAttempt\",\"relationName\":\"QuestionAttemptLogToStoryAttempt\"},{\"name\":\"question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"QuestionToQuestionAttemptLog\"}],\"dbName\":\"question_attempts_logs\"},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"image\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"grade\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"guardianEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"totalXp\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userProgress\",\"kind\":\"object\",\"type\":\"UserProgress\",\"relationName\":\"UserToUserProgress\"},{\"name\":\"storyAttempts\",\"kind\":\"object\",\"type\":\"StoryAttempt\",\"relationName\":\"StoryAttemptToUser\"}],\"dbName\":\"user\"},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":\"session\"},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accessTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"refreshTokenExpiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"scope\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"account\"},\"Verification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"identifier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"verification\"},\"Island\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"islandName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"unlockOrder\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"isLockedDefault\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"stories\",\"kind\":\"object\",\"type\":\"Story\",\"relationName\":\"IslandToStory\"},{\"name\":\"userProgress\",\"kind\":\"object\",\"type\":\"UserProgress\",\"relationName\":\"IslandToUserProgress\"}],\"dbName\":\"islands\"},\"UserProgress\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"islandId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isUnlocked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"isCompleted\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserProgress\"},{\"name\":\"island\",\"kind\":\"object\",\"type\":\"Island\",\"relationName\":\"IslandToUserProgress\"}],\"dbName\":\"user_progress\"},\"Question\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"stageType\",\"kind\":\"enum\",\"type\":\"StageType\"},{\"name\":\"questionType\",\"kind\":\"enum\",\"type\":\"QuestionType\"},{\"name\":\"questionText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"xpValue\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"story\",\"kind\":\"object\",\"type\":\"Story\",\"relationName\":\"QuestionToStory\"},{\"name\":\"answerOptions\",\"kind\":\"object\",\"type\":\"AnswerOption\",\"relationName\":\"AnswerOptionToQuestion\"},{\"name\":\"interactiveSlides\",\"kind\":\"object\",\"type\":\"InteractiveSlide\",\"relationName\":\"InteractiveSlideToQuestion\"},{\"name\":\"attemptLogs\",\"kind\":\"object\",\"type\":\"QuestionAttemptLog\",\"relationName\":\"QuestionToQuestionAttemptLog\"}],\"dbName\":\"questions\"},\"AnswerOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"optionText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isCorrect\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"AnswerOptionToQuestion\"}],\"dbName\":\"answer_option\"},\"Story\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"islandId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storyType\",\"kind\":\"enum\",\"type\":\"StoryType\"},{\"name\":\"island\",\"kind\":\"object\",\"type\":\"Island\",\"relationName\":\"IslandToStory\"},{\"name\":\"staticSlides\",\"kind\":\"object\",\"type\":\"StaticSlide\",\"relationName\":\"StaticSlideToStory\"},{\"name\":\"interactiveSlides\",\"kind\":\"object\",\"type\":\"InteractiveSlide\",\"relationName\":\"InteractiveSlideToStory\"},{\"name\":\"questions\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"QuestionToStory\"},{\"name\":\"storyAttempts\",\"kind\":\"object\",\"type\":\"StoryAttempt\",\"relationName\":\"StoryToStoryAttempt\"}],\"dbName\":\"stories\"},\"StaticSlide\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slideNumber\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"contentText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"story\",\"kind\":\"object\",\"type\":\"Story\",\"relationName\":\"StaticSlideToStory\"}],\"dbName\":\"static_slide\"},\"InteractiveSlide\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"questionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slideNumber\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"slideType\",\"kind\":\"enum\",\"type\":\"SlideType\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contentText\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"story\",\"kind\":\"object\",\"type\":\"Story\",\"relationName\":\"InteractiveSlideToStory\"},{\"name\":\"question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"InteractiveSlideToQuestion\"}],\"dbName\":\"interactive_slide\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -58,8 +58,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more StoryAttempts
+   * const storyAttempts = await prisma.storyAttempt.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -80,8 +80,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more StoryAttempts
+ * const storyAttempts = await prisma.storyAttempt.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -175,6 +175,36 @@ export interface PrismaClient<
   }>>
 
       /**
+   * `prisma.storyAttempt`: Exposes CRUD operations for the **StoryAttempt** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoryAttempts
+    * const storyAttempts = await prisma.storyAttempt.findMany()
+    * ```
+    */
+  get storyAttempt(): Prisma.StoryAttemptDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.stageAttempt`: Exposes CRUD operations for the **StageAttempt** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StageAttempts
+    * const stageAttempts = await prisma.stageAttempt.findMany()
+    * ```
+    */
+  get stageAttempt(): Prisma.StageAttemptDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.questionAttemptLog`: Exposes CRUD operations for the **QuestionAttemptLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QuestionAttemptLogs
+    * const questionAttemptLogs = await prisma.questionAttemptLog.findMany()
+    * ```
+    */
+  get questionAttemptLog(): Prisma.QuestionAttemptLogDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -213,6 +243,76 @@ export interface PrismaClient<
     * ```
     */
   get verification(): Prisma.VerificationDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.island`: Exposes CRUD operations for the **Island** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Islands
+    * const islands = await prisma.island.findMany()
+    * ```
+    */
+  get island(): Prisma.IslandDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.userProgress`: Exposes CRUD operations for the **UserProgress** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserProgresses
+    * const userProgresses = await prisma.userProgress.findMany()
+    * ```
+    */
+  get userProgress(): Prisma.UserProgressDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.question`: Exposes CRUD operations for the **Question** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Questions
+    * const questions = await prisma.question.findMany()
+    * ```
+    */
+  get question(): Prisma.QuestionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.answerOption`: Exposes CRUD operations for the **AnswerOption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AnswerOptions
+    * const answerOptions = await prisma.answerOption.findMany()
+    * ```
+    */
+  get answerOption(): Prisma.AnswerOptionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.story`: Exposes CRUD operations for the **Story** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Stories
+    * const stories = await prisma.story.findMany()
+    * ```
+    */
+  get story(): Prisma.StoryDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.staticSlide`: Exposes CRUD operations for the **StaticSlide** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StaticSlides
+    * const staticSlides = await prisma.staticSlide.findMany()
+    * ```
+    */
+  get staticSlide(): Prisma.StaticSlideDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.interactiveSlide`: Exposes CRUD operations for the **InteractiveSlide** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InteractiveSlides
+    * const interactiveSlides = await prisma.interactiveSlide.findMany()
+    * ```
+    */
+  get interactiveSlide(): Prisma.InteractiveSlideDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

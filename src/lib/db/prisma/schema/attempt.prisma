@@ -1,0 +1,60 @@
+enum AttemptStageType {
+  PRE_TEST
+  STORY
+  POST_TEST
+}
+
+model StoryAttempt {
+  id                  String    @id @default(cuid())
+  userId              String
+  storyId             String
+  startedAt           DateTime  @default(now())
+  finishedAt          DateTime?
+  totalTimeSeconds    Int       @default(0)
+  totalXpGained       Int       @default(0)
+  preTestScore        Decimal?  @db.Decimal(5, 2)
+  postTestScore       Decimal?  @db.Decimal(5, 2)
+  correctInteractiveCnt Int?
+  wrongInteractiveCnt   Int?
+  essayAnswer         String?
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  story         Story          @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  stageAttempts StageAttempt[]
+  questionLogs  QuestionAttemptLog[]
+
+  @@index([userId])
+  @@index([storyId])
+  @@map("story_attempts")
+}
+
+model StageAttempt {
+  id               String          @id @default(cuid())
+  attemptId        String
+  stageType        AttemptStageType
+  timeSpentSeconds Int             @default(0)
+  xpGained         Int             @default(0)
+  score            Decimal?        @db.Decimal(5, 2)
+
+  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@map("stage_attempts")
+}
+
+model QuestionAttemptLog {
+  id             String   @id @default(cuid())
+  attemptId      String
+  questionId     String
+  userAnswerText String?
+  isCorrect      Boolean?
+  attemptCount   Int      @default(1)
+  answeredAt     DateTime @default(now())
+
+  storyAttempt StoryAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("question_attempts_logs")
+}

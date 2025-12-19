@@ -51,10 +51,20 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  StoryAttempt: 'StoryAttempt',
+  StageAttempt: 'StageAttempt',
+  QuestionAttemptLog: 'QuestionAttemptLog',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Island: 'Island',
+  UserProgress: 'UserProgress',
+  Question: 'Question',
+  AnswerOption: 'AnswerOption',
+  Story: 'Story',
+  StaticSlide: 'StaticSlide',
+  InteractiveSlide: 'InteractiveSlide'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,6 +83,49 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const StoryAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  storyId: 'storyId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  totalTimeSeconds: 'totalTimeSeconds',
+  totalXpGained: 'totalXpGained',
+  preTestScore: 'preTestScore',
+  postTestScore: 'postTestScore',
+  correctInteractiveCnt: 'correctInteractiveCnt',
+  wrongInteractiveCnt: 'wrongInteractiveCnt',
+  essayAnswer: 'essayAnswer'
+} as const
+
+export type StoryAttemptScalarFieldEnum = (typeof StoryAttemptScalarFieldEnum)[keyof typeof StoryAttemptScalarFieldEnum]
+
+
+export const StageAttemptScalarFieldEnum = {
+  id: 'id',
+  attemptId: 'attemptId',
+  stageType: 'stageType',
+  timeSpentSeconds: 'timeSpentSeconds',
+  xpGained: 'xpGained',
+  score: 'score'
+} as const
+
+export type StageAttemptScalarFieldEnum = (typeof StageAttemptScalarFieldEnum)[keyof typeof StageAttemptScalarFieldEnum]
+
+
+export const QuestionAttemptLogScalarFieldEnum = {
+  id: 'id',
+  attemptId: 'attemptId',
+  questionId: 'questionId',
+  userAnswerText: 'userAnswerText',
+  isCorrect: 'isCorrect',
+  attemptCount: 'attemptCount',
+  answeredAt: 'answeredAt'
+} as const
+
+export type QuestionAttemptLogScalarFieldEnum = (typeof QuestionAttemptLogScalarFieldEnum)[keyof typeof QuestionAttemptLogScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -80,7 +133,11 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  grade: 'grade',
+  username: 'username',
+  guardianEmail: 'guardianEmail',
+  totalXp: 'totalXp'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -129,6 +186,83 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const IslandScalarFieldEnum = {
+  id: 'id',
+  islandName: 'islandName',
+  unlockOrder: 'unlockOrder',
+  isLockedDefault: 'isLockedDefault'
+} as const
+
+export type IslandScalarFieldEnum = (typeof IslandScalarFieldEnum)[keyof typeof IslandScalarFieldEnum]
+
+
+export const UserProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  islandId: 'islandId',
+  isUnlocked: 'isUnlocked',
+  isCompleted: 'isCompleted'
+} as const
+
+export type UserProgressScalarFieldEnum = (typeof UserProgressScalarFieldEnum)[keyof typeof UserProgressScalarFieldEnum]
+
+
+export const QuestionScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  stageType: 'stageType',
+  questionType: 'questionType',
+  questionText: 'questionText',
+  xpValue: 'xpValue'
+} as const
+
+export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const AnswerOptionScalarFieldEnum = {
+  id: 'id',
+  questionId: 'questionId',
+  optionText: 'optionText',
+  isCorrect: 'isCorrect'
+} as const
+
+export type AnswerOptionScalarFieldEnum = (typeof AnswerOptionScalarFieldEnum)[keyof typeof AnswerOptionScalarFieldEnum]
+
+
+export const StoryScalarFieldEnum = {
+  id: 'id',
+  islandId: 'islandId',
+  title: 'title',
+  storyType: 'storyType'
+} as const
+
+export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
+
+
+export const StaticSlideScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  slideNumber: 'slideNumber',
+  contentText: 'contentText',
+  imageUrl: 'imageUrl'
+} as const
+
+export type StaticSlideScalarFieldEnum = (typeof StaticSlideScalarFieldEnum)[keyof typeof StaticSlideScalarFieldEnum]
+
+
+export const InteractiveSlideScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  questionId: 'questionId',
+  slideNumber: 'slideNumber',
+  slideType: 'slideType',
+  imageUrl: 'imageUrl',
+  contentText: 'contentText'
+} as const
+
+export type InteractiveSlideScalarFieldEnum = (typeof InteractiveSlideScalarFieldEnum)[keyof typeof InteractiveSlideScalarFieldEnum]
 
 
 export const SortOrder = {
