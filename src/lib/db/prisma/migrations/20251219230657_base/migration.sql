@@ -65,10 +65,10 @@ CREATE TABLE "user" (
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "grade" INTEGER NOT NULL,
-    "username" TEXT NOT NULL,
+    "grade" INTEGER,
+    "username" TEXT,
     "guardianEmail" TEXT,
-    "totalXp" INTEGER NOT NULL DEFAULT 0,
+    "totalXp" INTEGER DEFAULT 0,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );

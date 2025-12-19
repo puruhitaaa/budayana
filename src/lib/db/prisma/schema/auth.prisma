@@ -6,14 +6,12 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  grade         Int?
+  username      String?   @unique
+  guardianEmail String?
+  totalXp       Int?      @default(0)
   sessions      Session[]
   accounts      Account[]
-
-  // Gamification fields
-  grade         Int
-  username      String    @unique
-  guardianEmail String?
-  totalXp       Int       @default(0)
 
   // Gamification relations
   userProgress  UserProgress[]
