@@ -14,6 +14,7 @@ const app = new Elysia()
       credentials: true,
     })
   )
+  .mount("/auth", auth.handler)
   .use(
     openapi({
       references: fromTypes(),
@@ -24,7 +25,6 @@ const app = new Elysia()
     })
   )
   .use(apiRoutes)
-  .mount("/api/auth", auth.handler)
   .get("/", () => "OK")
 
 export default app
