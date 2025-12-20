@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",
+    "@elysiajs/openapi": "^1.4.12",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "better-auth": "^1.4.7",
@@ -23,7 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
-    "bun-types": "latest",
+    "bun-types": "^1.3.5",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

@@ -1,7 +1,9 @@
 import "dotenv/config"
 import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
-import { auth } from "./lib/auth"
+import { openapi, fromTypes } from "@elysiajs/openapi"
+import { auth, OpenAPI } from "./lib/auth"
+import { apiRoutes } from "./routes"
 
 const app = new Elysia()
   .use(
@@ -12,13 +14,17 @@ const app = new Elysia()
       credentials: true,
     })
   )
-  .all("/api/auth/*", async (context) => {
-    const { request, status } = context
-    if (["POST", "GET"].includes(request.method)) {
-      return auth.handler(request)
-    }
-    return status(405)
-  })
+  .use(
+    openapi({
+      references: fromTypes(),
+      documentation: {
+        components: await OpenAPI.components,
+        paths: await OpenAPI.getPaths(),
+      },
+    })
+  )
+  .use(apiRoutes)
+  .mount("/api/auth", auth.handler)
   .get("/", () => "OK")
 
 export default app
