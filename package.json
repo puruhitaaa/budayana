@@ -8,7 +8,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "db:seed": "bun run src/lib/db/seed.ts",
+    "db:seed-islands": "bun run src/lib/db/seed-islands.ts",
+    "db:seed-stories": "bun run src/lib/db/seed-stories.ts",
     "ba:gen": "npx @better-auth/cli generate --config ./src/lib/auth/config.ts --output ./src/lib/db/prisma/auth.prisma",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
