@@ -5,7 +5,7 @@ import prisma from "../db"
 
 export const allowedOrigins = [
   process.env.CORS_ORIGIN || "",
-  "http://localhost:5173",
+  ...Array.from({ length: 10 }, (_, i) => `http://localhost:${5170 + i}`),
 ].filter(Boolean)
 
 export const auth = betterAuth({
