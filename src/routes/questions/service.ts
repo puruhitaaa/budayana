@@ -61,13 +61,24 @@ export async function getQuestions(
 /**
  * Get single question by ID with answer options
  */
-export async function getQuestionById(id: string) {
-  return prisma.question.findUnique({
+export async function getQuestionById(id: string, publicView: boolean = false) {
+  const question = await prisma.question.findUnique({
     where: { id },
     include: {
       answerOptions: true,
     },
   })
+
+  if (question && publicView) {
+    return {
+      ...question,
+      answerOptions: question.answerOptions.map(
+        ({ isCorrect, ...rest }) => rest
+      ),
+    }
+  }
+
+  return question
 }
 
 /**

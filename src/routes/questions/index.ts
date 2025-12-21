@@ -61,8 +61,11 @@ export const questionRoutes = new Elysia({ prefix: "/questions" })
    */
   .get(
     "/:id",
-    async ({ params, set }) => {
-      const question = await questionService.getQuestionById(params.id)
+    async ({ params, query, set }) => {
+      const question = await questionService.getQuestionById(
+        params.id,
+        query.public
+      )
 
       if (!question) {
         set.status = 404
@@ -73,6 +76,9 @@ export const questionRoutes = new Elysia({ prefix: "/questions" })
     },
     {
       params: t.Object({ id: t.String() }),
+      query: t.Object({
+        public: t.Optional(t.Boolean()),
+      }),
       detail: {
         tags: ["Questions"],
         summary: "Get question by ID",

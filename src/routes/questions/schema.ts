@@ -25,7 +25,7 @@ export const AnswerOptionSchema = t.Object({
   id: t.String(),
   questionId: t.String(),
   optionText: t.String(),
-  isCorrect: t.Boolean(),
+  isCorrect: t.Optional(t.Boolean()),
 })
 
 // Base Question schema
