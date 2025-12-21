@@ -1,17 +1,6 @@
 import prisma from "./index"
 import { StoryType } from "./prisma/generated/client"
 
-const islandIds = [
-  "cmjfyxb8p000770vhns17iwmz", // Nusa Tenggara
-  "cmjfyxb73000670vhfr7eskuj", // Bali
-  "cmjfyxb5s000570vhpkwjjq30", // Maluku
-  "cmjfyxb47000470vhk7ewxhrn", // Kalimantan
-  "cmjfyxb2k000370vh7koqk6jn", // Papua
-  "cmjfyxav3000270vhe3xjsvpa", // Jawa
-  "cmjfyxars000170vhlhjaguoe", // Sumatra
-  "cmjfyxaoz000070vh088fuob0", // Sulawesi
-]
-
 const storiesToSeed = [
   {
     title: "Pre-Test",
@@ -33,18 +22,10 @@ const storiesToSeed = [
 async function main() {
   console.log("Start seeding stories...")
 
-  for (const islandId of islandIds) {
-    console.log(`Checking island ${islandId}...`)
+  const islands = await prisma.island.findMany()
 
-    const island = await prisma.island.findUnique({
-      where: { id: islandId },
-    })
-
-    if (!island) {
-      console.warn(`Island with ID ${islandId} not found. Skipping.`)
-      continue
-    }
-
+  for (const island of islands) {
+    const islandId = island.id
     console.log(
       `Seeding stories for island: ${island.islandName} (${islandId})`
     )
