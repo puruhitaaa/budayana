@@ -120,9 +120,22 @@ export async function getAttemptById(id: string) {
 }
 
 /**
- * Create a new story attempt
+ * Create a new story attempt or resume an existing unfinished one
  */
 export async function createAttempt(userId: string, storyId: string) {
+  // Check for existing unfinished attempt
+  const existingAttempt = await prisma.storyAttempt.findFirst({
+    where: {
+      userId,
+      storyId,
+      finishedAt: null,
+    },
+  })
+
+  if (existingAttempt) {
+    return transformAttempt(existingAttempt)
+  }
+
   const attempt = await prisma.storyAttempt.create({
     data: {
       userId,
