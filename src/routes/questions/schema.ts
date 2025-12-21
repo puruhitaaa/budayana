@@ -91,4 +91,6 @@ export const CreateAnswerOptionSchema = t.Object({
 export const UpdateAnswerOptionSchema = t.Partial(CreateAnswerOptionSchema)
 
 // Paginated response
-export const PaginatedQuestionsSchema = createPaginatedSchema(QuestionSchema)
+export const PaginatedQuestionsSchema = createPaginatedSchema(
+  QuestionWithOptionsSchema
+)

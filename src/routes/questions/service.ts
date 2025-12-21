@@ -5,6 +5,7 @@ import type {
   Question,
   StageType,
   QuestionType,
+  AnswerOption,
 } from "../../lib/db/prisma/generated/client"
 import prisma from "../../lib/db"
 import {
@@ -31,8 +32,15 @@ const SEARCH_FIELDS = ["questionText"]
  */
 export async function getQuestions(
   pagination: PaginationParams,
-  filters: QuestionFilters = {}
-): Promise<PaginatedResult<Question>> {
+  filters: QuestionFilters = {},
+  publicView: boolean = false
+): Promise<
+  PaginatedResult<
+    Question & {
+      answerOptions: AnswerOption[] | Omit<AnswerOption, "isCorrect">[]
+    }
+  >
+> {
   const filterClause = buildWhereClause(
     {
       storyId: filters.storyId,
@@ -44,11 +52,14 @@ export async function getQuestions(
   const searchClause = buildSearchFilter(filters.search, SEARCH_FIELDS)
   const where = combineWhereClauses(filterClause, searchClause)
 
-  return paginatedQuery(
+  const result = await paginatedQuery(
     (options) =>
       prisma.question.findMany({
         ...options,
         where,
+        include: {
+          answerOptions: true,
+        },
       }),
     pagination,
     {
@@ -56,6 +67,18 @@ export async function getQuestions(
       defaultSortField: "id",
     }
   )
+
+  if (publicView) {
+    return {
+      ...result,
+      items: result.items.map((q) => ({
+        ...q,
+        answerOptions: q.answerOptions.map(({ isCorrect, ...rest }) => rest),
+      })),
+    }
+  }
+
+  return result
 }
 
 /**

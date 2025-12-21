@@ -37,21 +37,29 @@ export const questionRoutes = new Elysia({ prefix: "/questions" })
         questionType,
       } = query
 
+      const isPublic = query.public === "true"
+
       const result = await questionService.getQuestions(
         { cursor, limit, sortBy, sortOrder },
-        { search, storyId, stageType, questionType }
+        { search, storyId, stageType, questionType },
+        isPublic
       )
 
       return result
     },
     {
-      query: QuestionQuerySchema,
+      query: t.Composite([
+        QuestionQuerySchema,
+        t.Object({
+          public: t.Optional(t.String()),
+        }),
+      ]),
       response: { 200: PaginatedQuestionsSchema },
       detail: {
         tags: ["Questions"],
         summary: "List all questions",
         description:
-          "Get a paginated list of questions with optional filtering",
+          "Get a paginated list of questions with optional filtering. Use ?public=true to hide correct answers.",
       },
     }
   )
