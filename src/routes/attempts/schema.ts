@@ -99,6 +99,7 @@ export const AttemptQuerySchema = t.Composite([
   t.Object({
     userId: t.Optional(t.String()),
     storyId: t.Optional(t.String()),
+    islandId: t.Optional(t.String()),
     isFinished: t.Optional(t.Boolean()),
   }),
 ])

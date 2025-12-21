@@ -17,6 +17,7 @@ import {
 export interface AttemptFilters {
   userId?: string
   storyId?: string
+  islandId?: string
   isFinished?: boolean
 }
 
@@ -61,7 +62,15 @@ export async function getAttempts(
       ? { finishedAt: filters.isFinished ? { not: null } : null }
       : undefined
 
-  const where = combineWhereClauses(filterClause, finishedClause)
+  // Handle islandId filter (via relation)
+  const islandClause = filters.islandId
+    ? { story: { islandId: filters.islandId } }
+    : undefined
+
+  const where = combineWhereClauses(
+    combineWhereClauses(filterClause, finishedClause),
+    islandClause
+  )
 
   const result = await paginatedQuery(
     (options) =>

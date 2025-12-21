@@ -47,12 +47,20 @@ export const attemptRoutes = new Elysia({ prefix: "/attempts" })
         return { error: "Unauthorized", code: "UNAUTHORIZED" }
       }
 
-      const { cursor, limit, sortBy, sortOrder, storyId, isFinished } = query
+      const {
+        cursor,
+        limit,
+        sortBy,
+        sortOrder,
+        storyId,
+        islandId,
+        isFinished,
+      } = query
 
       // Force userId filter to current user
       const result = await attemptService.getAttempts(
         { cursor, limit, sortBy, sortOrder },
-        { userId: user.id, storyId, isFinished }
+        { userId: user.id, storyId, islandId, isFinished }
       )
 
       return result
