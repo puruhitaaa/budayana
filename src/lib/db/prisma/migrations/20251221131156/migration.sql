@@ -65,8 +65,9 @@ CREATE TABLE "user" (
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "username" TEXT,
+    "displayUsername" TEXT,
     "grade" INTEGER NOT NULL,
-    "username" TEXT NOT NULL,
     "guardianEmail" TEXT NOT NULL,
     "totalXp" INTEGER DEFAULT 0,
 
@@ -209,9 +210,6 @@ CREATE INDEX "question_attempts_logs_attemptId_idx" ON "question_attempts_logs"(
 
 -- CreateIndex
 CREATE INDEX "question_attempts_logs_questionId_idx" ON "question_attempts_logs"("questionId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");

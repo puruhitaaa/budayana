@@ -8,7 +8,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "ba:gen": "npx @better-auth/cli generate --config ./src/lib/auth/config.ts --output ./src/lib/db/prisma/schema/auth.prisma",
+    "ba:gen": "npx @better-auth/cli generate --config ./src/lib/auth/config.ts --output ./src/lib/db/prisma/auth.prisma",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },

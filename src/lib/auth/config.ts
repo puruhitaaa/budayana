@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { openAPI } from "better-auth/plugins"
+import { openAPI, username } from "better-auth/plugins"
 import prisma from "../db"
 
 export const allowedOrigins = [
@@ -13,7 +13,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   basePath: "/api",
-  plugins: [openAPI()],
+  plugins: [username(), openAPI()],
   user: {
     additionalFields: {
       grade: {
@@ -21,31 +21,23 @@ export const auth = betterAuth({
         input: true,
         required: true,
         fieldName: "grade",
-        references: {
-          model: "User",
-          field: "grade",
-        },
       },
-      username: {
-        type: "string",
-        input: true,
-        unique: true,
-        required: true,
-        fieldName: "username",
-        references: {
-          model: "User",
-          field: "username",
-        },
-      },
+      // username: {
+      //   type: "string",
+      //   input: true,
+      //   unique: true,
+      //   required: true,
+      //   fieldName: "username",
+      //   references: {
+      //     model: "User",
+      //     field: "username",
+      //   },
+      // },
       guardianEmail: {
         type: "string",
         input: true,
         required: true,
         fieldName: "guardianEmail",
-        references: {
-          model: "User",
-          field: "guardianEmail",
-        },
       },
       totalXp: {
         type: "number",
@@ -67,3 +59,27 @@ export const auth = betterAuth({
     },
   },
 })
+
+let _schema: ReturnType<typeof auth.api.generateOpenAPISchema>
+const getSchema = async () => (_schema ??= auth.api.generateOpenAPISchema())
+
+export const OpenAPI = {
+  getPaths: (prefix = "/auth/api") =>
+    getSchema().then(({ paths }) => {
+      const reference: typeof paths = Object.create(null)
+
+      for (const path of Object.keys(paths)) {
+        const key = prefix + path
+        reference[key] = paths[path]
+
+        for (const method of Object.keys(paths[path])) {
+          const operation = (reference[key] as any)[method]
+
+          operation.tags = ["Better Auth"]
+        }
+      }
+
+      return reference
+    }) as Promise<any>,
+  components: getSchema().then(({ components }) => components) as Promise<any>,
+} as const

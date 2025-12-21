@@ -2,8 +2,9 @@ import "dotenv/config"
 import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
 import { openapi, fromTypes } from "@elysiajs/openapi"
-import { auth, OpenAPI, allowedOrigins } from "./lib/auth"
+import { auth, allowedOrigins } from "./lib/auth"
 import { apiRoutes } from "./routes"
+import { OpenAPI } from "./lib/auth/config"
 
 const app = new Elysia()
   .use(

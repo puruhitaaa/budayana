@@ -134,8 +134,9 @@ export const UserScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  grade: 'grade',
   username: 'username',
+  displayUsername: 'displayUsername',
+  grade: 'grade',
   guardianEmail: 'guardianEmail',
   totalXp: 'totalXp'
 } as const
