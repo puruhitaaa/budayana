@@ -21,6 +21,17 @@ export interface IslandFilters {
 const ALLOWED_SORT_FIELDS = ["unlockOrder", "islandName", "id"]
 const SEARCH_FIELDS = ["islandName"]
 
+function slugify(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, "") // Trim - from end of text
+}
+
 /**
  * Get paginated list of islands
  */
@@ -78,6 +89,34 @@ export async function getIslandById(id: string, includeStories = false) {
 }
 
 /**
+ * Get single island by Slug with optional relations
+ */
+export async function getIslandBySlug(slug: string, includeStories = false) {
+  return prisma.island.findUnique({
+    where: { slug },
+    include: {
+      stories: includeStories
+        ? {
+            select: {
+              id: true,
+              title: true,
+              storyType: true,
+              order: true,
+            },
+            orderBy: { order: "asc" },
+          }
+        : false,
+      _count: {
+        select: {
+          stories: true,
+          userProgress: true,
+        },
+      },
+    },
+  })
+}
+
+/**
  * Create a new island
  */
 export async function createIsland(data: {
@@ -88,6 +127,7 @@ export async function createIsland(data: {
   return prisma.island.create({
     data: {
       islandName: data.islandName,
+      slug: slugify(data.islandName),
       unlockOrder: data.unlockOrder,
       isLockedDefault: data.isLockedDefault ?? true,
     },
@@ -105,9 +145,14 @@ export async function updateIsland(
     isLockedDefault?: boolean
   }
 ) {
+  const updateData = {
+    ...data,
+    ...(data.islandName ? { slug: slugify(data.islandName) } : {}),
+  }
+
   return prisma.island.update({
     where: { id },
-    data,
+    data: updateData,
   })
 }
 

@@ -1,5 +1,16 @@
 import prisma from "./index"
 
+function slugify(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, "") // Trim - from end of text
+}
+
 const islands = [
   {
     islandName: "Sulawesi",
@@ -47,21 +58,24 @@ async function main() {
   console.log("Start seeding...")
 
   for (const island of islands) {
+    const slug = slugify(island.islandName)
+    const data = { ...island, slug }
+
     const existingIsland = await prisma.island.findFirst({
       where: { islandName: island.islandName },
     })
 
     if (!existingIsland) {
       await prisma.island.create({
-        data: island,
+        data: data,
       })
-      console.log(`Created island: ${island.islandName}`)
+      console.log(`Created island: ${island.islandName} (${slug})`)
     } else {
       await prisma.island.update({
         where: { id: existingIsland.id },
-        data: island,
+        data: data,
       })
-      console.log(`Updated island: ${island.islandName}`)
+      console.log(`Updated island: ${island.islandName} (${slug})`)
     }
   }
 

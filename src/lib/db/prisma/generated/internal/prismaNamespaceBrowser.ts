@@ -192,6 +192,7 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 export const IslandScalarFieldEnum = {
   id: 'id',
   islandName: 'islandName',
+  slug: 'slug',
   unlockOrder: 'unlockOrder',
   isLockedDefault: 'isLockedDefault'
 } as const

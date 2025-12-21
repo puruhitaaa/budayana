@@ -224,17 +224,37 @@ export async function createQuestionLog(
   attemptId: string,
   data: {
     questionId: string
+    selectedOptionId?: string
     userAnswerText?: string
     isCorrect?: boolean
     attemptCount?: number
   }
 ) {
+  let isCorrect = data.isCorrect
+  let userAnswerText = data.userAnswerText
+
+  // If selectedOptionId is provided, verify it against the database
+  if (data.selectedOptionId) {
+    const selectedOption = await prisma.answerOption.findUnique({
+      where: { id: data.selectedOptionId },
+    })
+
+    // Verify the option belongs to the question and check correctness
+    if (selectedOption && selectedOption.questionId === data.questionId) {
+      isCorrect = selectedOption.isCorrect
+      // Auto-fill text if not provided
+      if (!userAnswerText) {
+        userAnswerText = selectedOption.optionText
+      }
+    }
+  }
+
   return prisma.questionAttemptLog.create({
     data: {
       attemptId,
       questionId: data.questionId,
-      userAnswerText: data.userAnswerText,
-      isCorrect: data.isCorrect,
+      userAnswerText: userAnswerText,
+      isCorrect: isCorrect,
       attemptCount: data.attemptCount ?? 1,
     },
   })

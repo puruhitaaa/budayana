@@ -1,11 +1,12 @@
 model Island {
-  id              String         @id @default(cuid())
+  id              String  @id @default(cuid())
   islandName      String
+  slug            String  @unique
   unlockOrder     Int
-  isLockedDefault Boolean        @default(true)
+  isLockedDefault Boolean @default(true)
 
-  stories         Story[]
-  userProgress    UserProgress[]
+  stories      Story[]
+  userProgress UserProgress[]
 
   @@map("islands")
 }

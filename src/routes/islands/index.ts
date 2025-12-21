@@ -48,6 +48,42 @@ export const islandRoutes = new Elysia({ prefix: "/islands" })
   )
 
   /**
+   * GET /api/islands/slug/:slug - Get single island by slug with stories
+   */
+  .get(
+    "/slug/:slug",
+    async ({ params, query, set }) => {
+      const includeStories = query.includeStories === "true"
+      const island = await islandService.getIslandBySlug(
+        params.slug,
+        includeStories
+      )
+
+      if (!island) {
+        set.status = 404
+        return { error: "Island not found", code: "NOT_FOUND" }
+      }
+
+      return island
+    },
+    {
+      params: t.Object({ slug: t.String() }),
+      query: t.Object({
+        includeStories: t.Optional(t.String()),
+      }),
+      response: {
+        200: IslandWithStoriesSchema,
+        404: ErrorResponseSchema,
+      },
+      detail: {
+        tags: ["Islands"],
+        summary: "Get island by Slug",
+        description: "Get a single island by slug with optional story list",
+      },
+    }
+  )
+
+  /**
    * GET /api/islands/:id - Get single island with stories
    */
   .get(

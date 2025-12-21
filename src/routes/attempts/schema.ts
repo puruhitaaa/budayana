@@ -88,6 +88,7 @@ export const CreateStageAttemptSchema = t.Object({
 // Create Question Attempt Log input
 export const CreateQuestionLogSchema = t.Object({
   questionId: t.String(),
+  selectedOptionId: t.Optional(t.String()),
   userAnswerText: t.Optional(t.String()),
   isCorrect: t.Optional(t.Boolean()),
   attemptCount: t.Optional(t.Number({ minimum: 1, default: 1 })),

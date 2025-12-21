@@ -11,6 +11,7 @@ import {
 export const IslandSchema = t.Object({
   id: t.String(),
   islandName: t.String(),
+  slug: t.String(),
   unlockOrder: t.Number(),
   isLockedDefault: t.Boolean(),
 })

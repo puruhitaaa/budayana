@@ -37,6 +37,7 @@ export type IslandSumAggregateOutputType = {
 export type IslandMinAggregateOutputType = {
   id: string | null
   islandName: string | null
+  slug: string | null
   unlockOrder: number | null
   isLockedDefault: boolean | null
 }
@@ -44,6 +45,7 @@ export type IslandMinAggregateOutputType = {
 export type IslandMaxAggregateOutputType = {
   id: string | null
   islandName: string | null
+  slug: string | null
   unlockOrder: number | null
   isLockedDefault: boolean | null
 }
@@ -51,6 +53,7 @@ export type IslandMaxAggregateOutputType = {
 export type IslandCountAggregateOutputType = {
   id: number
   islandName: number
+  slug: number
   unlockOrder: number
   isLockedDefault: number
   _all: number
@@ -68,6 +71,7 @@ export type IslandSumAggregateInputType = {
 export type IslandMinAggregateInputType = {
   id?: true
   islandName?: true
+  slug?: true
   unlockOrder?: true
   isLockedDefault?: true
 }
@@ -75,6 +79,7 @@ export type IslandMinAggregateInputType = {
 export type IslandMaxAggregateInputType = {
   id?: true
   islandName?: true
+  slug?: true
   unlockOrder?: true
   isLockedDefault?: true
 }
@@ -82,6 +87,7 @@ export type IslandMaxAggregateInputType = {
 export type IslandCountAggregateInputType = {
   id?: true
   islandName?: true
+  slug?: true
   unlockOrder?: true
   isLockedDefault?: true
   _all?: true
@@ -176,6 +182,7 @@ export type IslandGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type IslandGroupByOutputType = {
   id: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault: boolean
   _count: IslandCountAggregateOutputType | null
@@ -206,6 +213,7 @@ export type IslandWhereInput = {
   NOT?: Prisma.IslandWhereInput | Prisma.IslandWhereInput[]
   id?: Prisma.StringFilter<"Island"> | string
   islandName?: Prisma.StringFilter<"Island"> | string
+  slug?: Prisma.StringFilter<"Island"> | string
   unlockOrder?: Prisma.IntFilter<"Island"> | number
   isLockedDefault?: Prisma.BoolFilter<"Island"> | boolean
   stories?: Prisma.StoryListRelationFilter
@@ -215,6 +223,7 @@ export type IslandWhereInput = {
 export type IslandOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   islandName?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   unlockOrder?: Prisma.SortOrder
   isLockedDefault?: Prisma.SortOrder
   stories?: Prisma.StoryOrderByRelationAggregateInput
@@ -223,6 +232,7 @@ export type IslandOrderByWithRelationInput = {
 
 export type IslandWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  slug?: string
   AND?: Prisma.IslandWhereInput | Prisma.IslandWhereInput[]
   OR?: Prisma.IslandWhereInput[]
   NOT?: Prisma.IslandWhereInput | Prisma.IslandWhereInput[]
@@ -231,11 +241,12 @@ export type IslandWhereUniqueInput = Prisma.AtLeast<{
   isLockedDefault?: Prisma.BoolFilter<"Island"> | boolean
   stories?: Prisma.StoryListRelationFilter
   userProgress?: Prisma.UserProgressListRelationFilter
-}, "id">
+}, "id" | "slug">
 
 export type IslandOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   islandName?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   unlockOrder?: Prisma.SortOrder
   isLockedDefault?: Prisma.SortOrder
   _count?: Prisma.IslandCountOrderByAggregateInput
@@ -251,6 +262,7 @@ export type IslandScalarWhereWithAggregatesInput = {
   NOT?: Prisma.IslandScalarWhereWithAggregatesInput | Prisma.IslandScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Island"> | string
   islandName?: Prisma.StringWithAggregatesFilter<"Island"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"Island"> | string
   unlockOrder?: Prisma.IntWithAggregatesFilter<"Island"> | number
   isLockedDefault?: Prisma.BoolWithAggregatesFilter<"Island"> | boolean
 }
@@ -258,6 +270,7 @@ export type IslandScalarWhereWithAggregatesInput = {
 export type IslandCreateInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   stories?: Prisma.StoryCreateNestedManyWithoutIslandInput
@@ -267,6 +280,7 @@ export type IslandCreateInput = {
 export type IslandUncheckedCreateInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutIslandInput
@@ -276,6 +290,7 @@ export type IslandUncheckedCreateInput = {
 export type IslandUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stories?: Prisma.StoryUpdateManyWithoutIslandNestedInput
@@ -285,6 +300,7 @@ export type IslandUpdateInput = {
 export type IslandUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stories?: Prisma.StoryUncheckedUpdateManyWithoutIslandNestedInput
@@ -294,6 +310,7 @@ export type IslandUncheckedUpdateInput = {
 export type IslandCreateManyInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
 }
@@ -301,6 +318,7 @@ export type IslandCreateManyInput = {
 export type IslandUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -308,6 +326,7 @@ export type IslandUpdateManyMutationInput = {
 export type IslandUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
@@ -315,6 +334,7 @@ export type IslandUncheckedUpdateManyInput = {
 export type IslandCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandName?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   unlockOrder?: Prisma.SortOrder
   isLockedDefault?: Prisma.SortOrder
 }
@@ -326,6 +346,7 @@ export type IslandAvgOrderByAggregateInput = {
 export type IslandMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandName?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   unlockOrder?: Prisma.SortOrder
   isLockedDefault?: Prisma.SortOrder
 }
@@ -333,6 +354,7 @@ export type IslandMaxOrderByAggregateInput = {
 export type IslandMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandName?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   unlockOrder?: Prisma.SortOrder
   isLockedDefault?: Prisma.SortOrder
 }
@@ -377,6 +399,7 @@ export type IslandUpdateOneRequiredWithoutStoriesNestedInput = {
 export type IslandCreateWithoutUserProgressInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   stories?: Prisma.StoryCreateNestedManyWithoutIslandInput
@@ -385,6 +408,7 @@ export type IslandCreateWithoutUserProgressInput = {
 export type IslandUncheckedCreateWithoutUserProgressInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutIslandInput
@@ -409,6 +433,7 @@ export type IslandUpdateToOneWithWhereWithoutUserProgressInput = {
 export type IslandUpdateWithoutUserProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stories?: Prisma.StoryUpdateManyWithoutIslandNestedInput
@@ -417,6 +442,7 @@ export type IslandUpdateWithoutUserProgressInput = {
 export type IslandUncheckedUpdateWithoutUserProgressInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   stories?: Prisma.StoryUncheckedUpdateManyWithoutIslandNestedInput
@@ -425,6 +451,7 @@ export type IslandUncheckedUpdateWithoutUserProgressInput = {
 export type IslandCreateWithoutStoriesInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   userProgress?: Prisma.UserProgressCreateNestedManyWithoutIslandInput
@@ -433,6 +460,7 @@ export type IslandCreateWithoutStoriesInput = {
 export type IslandUncheckedCreateWithoutStoriesInput = {
   id?: string
   islandName: string
+  slug: string
   unlockOrder: number
   isLockedDefault?: boolean
   userProgress?: Prisma.UserProgressUncheckedCreateNestedManyWithoutIslandInput
@@ -457,6 +485,7 @@ export type IslandUpdateToOneWithWhereWithoutStoriesInput = {
 export type IslandUpdateWithoutStoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userProgress?: Prisma.UserProgressUpdateManyWithoutIslandNestedInput
@@ -465,6 +494,7 @@ export type IslandUpdateWithoutStoriesInput = {
 export type IslandUncheckedUpdateWithoutStoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   unlockOrder?: Prisma.IntFieldUpdateOperationsInput | number
   isLockedDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userProgress?: Prisma.UserProgressUncheckedUpdateManyWithoutIslandNestedInput
@@ -513,6 +543,7 @@ export type IslandCountOutputTypeCountUserProgressArgs<ExtArgs extends runtime.T
 export type IslandSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   islandName?: boolean
+  slug?: boolean
   unlockOrder?: boolean
   isLockedDefault?: boolean
   stories?: boolean | Prisma.Island$storiesArgs<ExtArgs>
@@ -523,6 +554,7 @@ export type IslandSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type IslandSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   islandName?: boolean
+  slug?: boolean
   unlockOrder?: boolean
   isLockedDefault?: boolean
 }, ExtArgs["result"]["island"]>
@@ -530,6 +562,7 @@ export type IslandSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type IslandSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   islandName?: boolean
+  slug?: boolean
   unlockOrder?: boolean
   isLockedDefault?: boolean
 }, ExtArgs["result"]["island"]>
@@ -537,11 +570,12 @@ export type IslandSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type IslandSelectScalar = {
   id?: boolean
   islandName?: boolean
+  slug?: boolean
   unlockOrder?: boolean
   isLockedDefault?: boolean
 }
 
-export type IslandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "islandName" | "unlockOrder" | "isLockedDefault", ExtArgs["result"]["island"]>
+export type IslandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "islandName" | "slug" | "unlockOrder" | "isLockedDefault", ExtArgs["result"]["island"]>
 export type IslandInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stories?: boolean | Prisma.Island$storiesArgs<ExtArgs>
   userProgress?: boolean | Prisma.Island$userProgressArgs<ExtArgs>
@@ -559,6 +593,7 @@ export type $IslandPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     islandName: string
+    slug: string
     unlockOrder: number
     isLockedDefault: boolean
   }, ExtArgs["result"]["island"]>
@@ -988,6 +1023,7 @@ export interface Prisma__IslandClient<T, Null = never, ExtArgs extends runtime.T
 export interface IslandFieldRefs {
   readonly id: Prisma.FieldRef<"Island", 'String'>
   readonly islandName: Prisma.FieldRef<"Island", 'String'>
+  readonly slug: Prisma.FieldRef<"Island", 'String'>
   readonly unlockOrder: Prisma.FieldRef<"Island", 'Int'>
   readonly isLockedDefault: Prisma.FieldRef<"Island", 'Boolean'>
 }
