@@ -16,14 +16,17 @@ const storiesToSeed = [
   {
     title: "Pre-Test",
     storyType: StoryType.INTERACTIVE,
+    order: 1,
   },
   {
     title: "Cerita Rakyat Interaktif",
     storyType: StoryType.INTERACTIVE,
+    order: 2,
   },
   {
     title: "Post-Test",
     storyType: StoryType.INTERACTIVE,
+    order: 3,
   },
 ]
 

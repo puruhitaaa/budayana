@@ -24,6 +24,7 @@ export const StorySchema = t.Object({
   islandId: t.String(),
   title: t.String(),
   storyType: StoryTypeEnum,
+  order: t.Number(),
 })
 
 // Static Slide schema

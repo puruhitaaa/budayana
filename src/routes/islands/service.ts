@@ -62,8 +62,9 @@ export async function getIslandById(id: string, includeStories = false) {
               id: true,
               title: true,
               storyType: true,
+              order: true,
             },
-            orderBy: { title: "asc" },
+            orderBy: { order: "asc" },
           }
         : false,
       _count: {

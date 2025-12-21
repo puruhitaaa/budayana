@@ -24,6 +24,7 @@ export const IslandWithStoriesSchema = t.Object({
         id: t.String(),
         title: t.String(),
         storyType: t.Union([t.Literal("STATIC"), t.Literal("INTERACTIVE")]),
+        order: t.Number(),
       })
     )
   ),

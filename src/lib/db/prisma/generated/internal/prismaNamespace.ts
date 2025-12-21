@@ -1645,7 +1645,8 @@ export const StoryScalarFieldEnum = {
   id: 'id',
   islandId: 'islandId',
   title: 'title',
-  storyType: 'storyType'
+  storyType: 'storyType',
+  order: 'order'
 } as const
 
 export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
