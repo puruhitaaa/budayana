@@ -260,6 +260,19 @@ export async function createStageAttempt(
     },
   })
 
+  // Automatically update the parent StoryAttempt with the score
+  if (data.stageType === "PRE_TEST") {
+    await prisma.storyAttempt.update({
+      where: { id: attemptId },
+      data: { preTestScore: calculatedScore },
+    })
+  } else if (data.stageType === "POST_TEST") {
+    await prisma.storyAttempt.update({
+      where: { id: attemptId },
+      data: { postTestScore: calculatedScore },
+    })
+  }
+
   return {
     ...stage,
     score: toNumber(stage.score),

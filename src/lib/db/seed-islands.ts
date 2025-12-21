@@ -15,7 +15,7 @@ const islands = [
   {
     islandName: "Sulawesi",
     unlockOrder: 1,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Sumatra",
@@ -25,32 +25,32 @@ const islands = [
   {
     islandName: "Jawa",
     unlockOrder: 3,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Papua",
     unlockOrder: 4,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Kalimantan",
     unlockOrder: 5,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Maluku",
     unlockOrder: 6,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Bali",
     unlockOrder: 7,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
   {
     islandName: "Nusa Tenggara",
     unlockOrder: 8,
-    isLockedDefault: true,
+    isLockedDefault: false,
   },
 ]
 
