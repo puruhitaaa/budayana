@@ -212,13 +212,40 @@ export async function createStageAttempt(
     score?: number
   }
 ) {
+  // Calculate score server-side if not provided
+  let calculatedScore = data.score
+
+  if (calculatedScore === undefined) {
+    // Fetch all question logs for this attempt
+    const logs = await prisma.questionAttemptLog.findMany({
+      where: {
+        attemptId,
+        question: {
+          stageType:
+            data.stageType === "STORY" ? "INTERACTIVE" : data.stageType,
+        },
+      },
+      include: {
+        question: true,
+      },
+    })
+
+    if (logs.length > 0) {
+      const correctCount = logs.filter((log) => log.isCorrect).length
+      // Simple percentage score: (correct / total) * 100
+      calculatedScore = (correctCount / logs.length) * 100
+    } else {
+      calculatedScore = 0
+    }
+  }
+
   const stage = await prisma.stageAttempt.create({
     data: {
       attemptId,
       stageType: data.stageType,
       timeSpentSeconds: data.timeSpentSeconds ?? 0,
       xpGained: data.xpGained ?? 0,
-      score: data.score,
+      score: calculatedScore,
     },
   })
 
