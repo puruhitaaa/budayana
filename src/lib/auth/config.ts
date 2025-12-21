@@ -3,6 +3,11 @@ import { prismaAdapter } from "better-auth/adapters/prisma"
 import { openAPI } from "better-auth/plugins"
 import prisma from "../db"
 
+export const allowedOrigins = [
+  process.env.CORS_ORIGIN || "",
+  "http://localhost:5173",
+].filter(Boolean)
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -50,7 +55,7 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [process.env.CORS_ORIGIN || ""],
+  trustedOrigins: allowedOrigins,
   emailAndPassword: {
     enabled: true,
   },

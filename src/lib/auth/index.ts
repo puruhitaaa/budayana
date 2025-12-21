@@ -1,4 +1,4 @@
-export { auth } from "./config"
+export { auth, allowedOrigins } from "./config"
 
 // import { openAPI } from "better-auth/plugins"
 import { auth } from "./config"

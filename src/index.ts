@@ -2,13 +2,13 @@ import "dotenv/config"
 import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
 import { openapi, fromTypes } from "@elysiajs/openapi"
-import { auth, OpenAPI } from "./lib/auth"
+import { auth, OpenAPI, allowedOrigins } from "./lib/auth"
 import { apiRoutes } from "./routes"
 
 const app = new Elysia()
   .use(
     cors({
-      origin: process.env.CORS_ORIGIN || "",
+      origin: allowedOrigins,
       methods: ["GET", "POST", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
