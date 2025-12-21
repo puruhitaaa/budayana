@@ -18,6 +18,7 @@ import {
   StoryAttemptSchema,
   StageAttemptSchema,
   QuestionAttemptLogSchema,
+  StoryAttemptWithDetailsSchema,
 } from "./schema"
 import * as attemptService from "./service"
 
@@ -141,7 +142,7 @@ export const attemptRoutes = new Elysia({ prefix: "/attempts" })
         summary: "Start new attempt",
       },
       response: {
-        200: StoryAttemptSchema,
+        200: StoryAttemptWithDetailsSchema,
         401: ErrorResponseSchema,
       },
     }

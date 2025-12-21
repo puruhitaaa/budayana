@@ -130,10 +130,18 @@ export async function createAttempt(userId: string, storyId: string) {
       storyId,
       finishedAt: null,
     },
+    include: {
+      questionLogs: {
+        orderBy: { answeredAt: "asc" },
+      },
+    },
   })
 
   if (existingAttempt) {
-    return transformAttempt(existingAttempt)
+    return {
+      ...transformAttempt(existingAttempt),
+      questionLogs: existingAttempt.questionLogs,
+    }
   }
 
   const attempt = await prisma.storyAttempt.create({
@@ -142,7 +150,10 @@ export async function createAttempt(userId: string, storyId: string) {
       storyId,
     },
   })
-  return transformAttempt(attempt)
+  return {
+    ...transformAttempt(attempt),
+    questionLogs: [],
+  }
 }
 
 /**
