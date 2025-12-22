@@ -49,6 +49,11 @@ export const StoryAttemptSchema = t.Object({
   correctInteractiveCnt: t.Nullable(t.Number()),
   wrongInteractiveCnt: t.Nullable(t.Number()),
   essayAnswer: t.Nullable(t.String()),
+  story: t.Optional(
+    t.Object({
+      title: t.String(),
+    })
+  ),
 })
 
 // Story Attempt with relations

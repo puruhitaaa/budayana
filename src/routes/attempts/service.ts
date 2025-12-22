@@ -33,11 +33,14 @@ function toNumber(val: any): number | null {
 }
 
 // Helper to transform attempt result
-function transformAttempt(attempt: StoryAttempt) {
+function transformAttempt(
+  attempt: StoryAttempt & { story?: { title: string } }
+) {
   return {
     ...attempt,
     preTestScore: toNumber(attempt.preTestScore),
     postTestScore: toNumber(attempt.postTestScore),
+    story: attempt.story,
   }
 }
 
@@ -77,6 +80,13 @@ export async function getAttempts(
       prisma.storyAttempt.findMany({
         ...options,
         where,
+        include: {
+          story: {
+            select: {
+              title: true,
+            },
+          },
+        },
       }),
     pagination,
     {
