@@ -8,14 +8,19 @@ const storiesToSeed = [
     order: 1,
   },
   {
+    title: "Cerita Rakyat",
+    storyType: StoryType.STATIC,
+    order: 2,
+  },
+  {
     title: "Cerita Rakyat Interaktif",
     storyType: StoryType.INTERACTIVE,
-    order: 2,
+    order: 3,
   },
   {
     title: "Post-Test",
     storyType: StoryType.INTERACTIVE,
-    order: 3,
+    order: 4,
   },
 ]
 

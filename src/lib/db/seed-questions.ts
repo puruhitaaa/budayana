@@ -1,5 +1,5 @@
 import prisma from "./index"
-import { StageType, QuestionType } from "./prisma/generated/client"
+import { StageType, QuestionType, SlideType } from "./prisma/generated/client"
 
 const questionsData: Record<string, any[]> = {
   sulawesi: [
@@ -459,6 +459,12 @@ async function main() {
         `  Seeding questions for story: ${story.title} (${stageType})`
       )
 
+      // Delete existing interactive slides for this story to avoid duplicates
+      await prisma.interactiveSlide.deleteMany({
+        where: { storyId: story.id },
+      })
+      console.log(`    Deleted existing interactive slides`)
+
       // Delete existing questions for this story and stage type to avoid duplicates
       await prisma.question.deleteMany({
         where: {
@@ -466,6 +472,9 @@ async function main() {
           stageType: stageType,
         },
       })
+
+      // Track created questions for interactive slides
+      const createdQuestions: { id: string; slideNumber: number }[] = []
 
       for (const q of questions) {
         const createdQuestion = await prisma.question.create({
@@ -483,8 +492,44 @@ async function main() {
             },
           },
         })
+
+        // Use the id from questionsData as the slideNumber
+        createdQuestions.push({
+          id: createdQuestion.id,
+          slideNumber: q.id,
+        })
+
         console.log(`    Created question: ${q.question.substring(0, 30)}...`)
       }
+
+      // Create interactive slides for each question (GAME type)
+      for (const questionData of createdQuestions) {
+        await prisma.interactiveSlide.create({
+          data: {
+            storyId: story.id,
+            slideNumber: questionData.slideNumber,
+            slideType: SlideType.GAME,
+            questionId: questionData.id,
+          },
+        })
+      }
+      console.log(
+        `    Created ${createdQuestions.length} interactive slides (GAME)`
+      )
+
+      // Add an ENDING slide at the end
+      const lastSlideNumber = Math.max(
+        ...createdQuestions.map((q) => q.slideNumber)
+      )
+      await prisma.interactiveSlide.create({
+        data: {
+          storyId: story.id,
+          slideNumber: lastSlideNumber + 1,
+          slideType: SlideType.ENDING,
+          contentText: "Kuis Selesai.",
+        },
+      })
+      console.log(`    Created ENDING slide`)
     }
   }
 

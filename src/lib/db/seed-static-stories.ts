@@ -214,52 +214,60 @@ Warga menyambutnya dengan sorak-sorai.
 async function main() {
   console.log("Start seeding static stories...")
 
-  const islands = await prisma.island.findMany()
+  for (const [islandKey, data] of Object.entries(storyData)) {
+    // Find island by name (case-insensitive)
+    const island = await prisma.island.findFirst({
+      where: { islandName: { equals: islandKey, mode: "insensitive" } },
+    })
 
-  for (const island of islands) {
-    const islandKey = island.islandName.toLowerCase()
-    const data = storyData[islandKey as keyof typeof storyData]
-
-    if (!data) {
-      console.log(`No story data found for island: ${island.islandName}`)
+    if (!island) {
+      console.log(`Island not found: ${islandKey}, skipping...`)
       continue
     }
 
-    console.log(`Processing story for island: ${island.islandName}`)
+    console.log(`Processing static story for island: ${island.islandName}`)
 
-    // Find the "Cerita Rakyat Interaktif" story
-    const story = await prisma.story.findFirst({
+    // Find or create STATIC story for this island
+    let story = await prisma.story.findFirst({
       where: {
         islandId: island.id,
-        title: "Cerita Rakyat Interaktif",
+        storyType: StoryType.STATIC,
       },
     })
 
     if (!story) {
-      console.log(`  Story 'Cerita Rakyat Interaktif' not found, skipping...`)
-      continue
+      story = await prisma.story.create({
+        data: {
+          islandId: island.id,
+          title: data.title,
+          subtitle: data.subtitle,
+          coverImage: data.coverImage,
+          backgroundImage: data.backgroundImage,
+          storyType: StoryType.STATIC,
+          order: 2, // Static stories are usually the 2nd stage
+        },
+      })
+      console.log(`  Created new STATIC story: ${data.title}`)
+    } else {
+      await prisma.story.update({
+        where: { id: story.id },
+        data: {
+          title: data.title,
+          subtitle: data.subtitle,
+          coverImage: data.coverImage,
+          backgroundImage: data.backgroundImage,
+        },
+      })
+      console.log(`  Updated existing STATIC story: ${data.title}`)
     }
 
-    // Update story metadata
-    await prisma.story.update({
-      where: { id: story.id },
-      data: {
-        title: data.title, // Update title to specific story title
-        subtitle: data.subtitle,
-        coverImage: data.coverImage,
-        backgroundImage: data.backgroundImage,
-        storyType: StoryType.STATIC,
-      },
-    })
-    console.log(`  Updated story metadata: ${data.title}`)
-
-    // Delete existing slides
+    // Delete existing static slides
     await prisma.staticSlide.deleteMany({
       where: { storyId: story.id },
     })
-    console.log(`  Deleted existing slides`)
+    console.log(`  Deleted existing static slides`)
 
-    // Create new slides
+    // Create new static slides from pages
     for (let i = 0; i < data.pages.length; i++) {
       const page = data.pages[i]
       let slideType = SlideType.CONTENT
@@ -272,11 +280,11 @@ async function main() {
           storyId: story.id,
           slideNumber: i + 1,
           slideType: slideType,
-          contentText: page.content,
+          contentText: page.content || null,
         },
       })
     }
-    console.log(`  Created ${data.pages.length} slides`)
+    console.log(`  Created ${data.pages.length} static slides`)
   }
 
   console.log("Seeding static stories finished.")

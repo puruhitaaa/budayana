@@ -62,6 +62,9 @@ export async function getIslands(
 
 /**
  * Get single island by ID with optional relations
+ * When includeStories is true, only returns stories that have slides:
+ * - INTERACTIVE stories must have at least one interactiveSlide
+ * - STATIC stories must have at least one staticSlide
  */
 export async function getIslandById(id: string, includeStories = false) {
   return prisma.island.findUnique({
@@ -69,6 +72,18 @@ export async function getIslandById(id: string, includeStories = false) {
     include: {
       stories: includeStories
         ? {
+            where: {
+              OR: [
+                {
+                  storyType: "INTERACTIVE",
+                  interactiveSlides: { some: {} },
+                },
+                {
+                  storyType: "STATIC",
+                  staticSlides: { some: {} },
+                },
+              ],
+            },
             select: {
               id: true,
               title: true,
@@ -90,6 +105,9 @@ export async function getIslandById(id: string, includeStories = false) {
 
 /**
  * Get single island by Slug with optional relations
+ * When includeStories is true, only returns stories that have slides:
+ * - INTERACTIVE stories must have at least one interactiveSlide
+ * - STATIC stories must have at least one staticSlide
  */
 export async function getIslandBySlug(slug: string, includeStories = false) {
   return prisma.island.findUnique({
@@ -97,6 +115,18 @@ export async function getIslandBySlug(slug: string, includeStories = false) {
     include: {
       stories: includeStories
         ? {
+            where: {
+              OR: [
+                {
+                  storyType: "INTERACTIVE",
+                  interactiveSlides: { some: {} },
+                },
+                {
+                  storyType: "STATIC",
+                  staticSlides: { some: {} },
+                },
+              ],
+            },
             select: {
               id: true,
               title: true,

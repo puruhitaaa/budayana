@@ -204,6 +204,9 @@ async function main() {
       where: {
         islandId: island.id,
         storyType: StoryType.INTERACTIVE,
+        NOT: {
+          title: { in: ["Pre-Test", "Post-Test"] },
+        },
       },
     })
 
