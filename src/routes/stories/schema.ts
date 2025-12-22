@@ -43,7 +43,23 @@ export const StaticSlideSchema = t.Object({
   imageUrl: t.Nullable(t.String()),
 })
 
-// Interactive Slide schema
+// Answer Option schema (without isCorrect for security)
+export const AnswerOptionSchema = t.Object({
+  id: t.String(),
+  optionText: t.String(),
+})
+
+// Question schema for interactive slides
+export const QuestionSchema = t.Object({
+  id: t.String(),
+  questionText: t.String(),
+  questionType: t.String(),
+  xpValue: t.Number(),
+  metadata: t.Nullable(t.Any()),
+  answerOptions: t.Array(AnswerOptionSchema),
+})
+
+// Interactive Slide schema (with nested question for game slides)
 export const InteractiveSlideSchema = t.Object({
   id: t.String(),
   storyId: t.String(),
@@ -52,6 +68,7 @@ export const InteractiveSlideSchema = t.Object({
   slideType: SlideTypeEnum,
   imageUrl: t.Nullable(t.String()),
   contentText: t.Nullable(t.String()),
+  question: t.Nullable(QuestionSchema),
 })
 
 // Story with relations

@@ -62,7 +62,21 @@ export async function getStoryById(id: string, includeSlides = true) {
     include: {
       staticSlides: includeSlides ? { orderBy: { slideNumber: "asc" } } : false,
       interactiveSlides: includeSlides
-        ? { orderBy: { slideNumber: "asc" } }
+        ? {
+            orderBy: { slideNumber: "asc" },
+            include: {
+              question: {
+                include: {
+                  answerOptions: {
+                    select: {
+                      id: true,
+                      optionText: true,
+                    },
+                  },
+                },
+              },
+            },
+          }
         : false,
       _count: {
         select: {

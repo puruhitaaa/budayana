@@ -283,6 +283,7 @@ export async function createStageAttempt(
 
 /**
  * Create question attempt log
+ * SECURITY: Server-side answer validation - client cannot spoof correctness
  */
 export async function createQuestionLog(
   attemptId: string,
@@ -297,19 +298,74 @@ export async function createQuestionLog(
   let isCorrect = data.isCorrect
   let userAnswerText = data.userAnswerText
 
-  // If selectedOptionId is provided, verify it against the database
+  // Fetch question to determine type and validation logic
+  const question = await prisma.question.findUnique({
+    where: { id: data.questionId },
+    include: {
+      answerOptions: true,
+    },
+  })
+
+  if (!question) {
+    throw new Error(`Question not found: ${data.questionId}`)
+  }
+
+  // Handle MCQ and TRUE_FALSE via selectedOptionId
   if (data.selectedOptionId) {
     const selectedOption = await prisma.answerOption.findUnique({
       where: { id: data.selectedOptionId },
     })
 
-    // Verify the option belongs to the question and check correctness
-    if (selectedOption && selectedOption.questionId === data.questionId) {
-      isCorrect = selectedOption.isCorrect
-      // Auto-fill text if not provided
-      if (!userAnswerText) {
-        userAnswerText = selectedOption.optionText
+    // SECURITY: Reject invalid option IDs
+    if (!selectedOption) {
+      throw new Error(`Invalid answer option ID: ${data.selectedOptionId}`)
+    }
+
+    // SECURITY: Verify the option belongs to the question
+    if (selectedOption.questionId !== data.questionId) {
+      throw new Error(
+        `Answer option ${data.selectedOptionId} does not belong to question ${data.questionId}`
+      )
+    }
+
+    // Server-side correctness check (client cannot spoof this)
+    isCorrect = selectedOption.isCorrect
+
+    // Auto-fill text if not provided
+    if (!userAnswerText) {
+      userAnswerText = selectedOption.optionText
+    }
+  }
+  // Handle DRAG_DROP validation
+  else if (question.questionType === "DRAG_DROP" && userAnswerText) {
+    try {
+      const metadata = question.metadata as {
+        items: Array<{ id: string; label: string }>
+        correctOrder: string[]
       }
+
+      if (!metadata?.correctOrder) {
+        throw new Error(
+          `Question ${data.questionId} is DRAG_DROP but missing correctOrder in metadata`
+        )
+      }
+
+      // Parse user's answer (expecting JSON array of IDs)
+      const userOrder = JSON.parse(userAnswerText)
+
+      if (!Array.isArray(userOrder)) {
+        throw new Error("DRAG_DROP answer must be a JSON array of item IDs")
+      }
+
+      // Validate order matches correctOrder exactly
+      isCorrect =
+        userOrder.length === metadata.correctOrder.length &&
+        userOrder.every((id, index) => id === metadata.correctOrder[index])
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error("Invalid JSON format for DRAG_DROP answer")
+      }
+      throw error
     }
   }
 
@@ -318,7 +374,7 @@ export async function createQuestionLog(
       attemptId,
       questionId: data.questionId,
       userAnswerText: userAnswerText,
-      isCorrect: isCorrect,
+      isCorrect: isCorrect ?? false, // Default to false if no validation occurred
       attemptCount: data.attemptCount ?? 1,
     },
   })
