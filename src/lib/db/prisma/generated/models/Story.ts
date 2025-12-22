@@ -38,6 +38,9 @@ export type StoryMinAggregateOutputType = {
   id: string | null
   islandId: string | null
   title: string | null
+  subtitle: string | null
+  coverImage: string | null
+  backgroundImage: string | null
   storyType: $Enums.StoryType | null
   order: number | null
 }
@@ -46,6 +49,9 @@ export type StoryMaxAggregateOutputType = {
   id: string | null
   islandId: string | null
   title: string | null
+  subtitle: string | null
+  coverImage: string | null
+  backgroundImage: string | null
   storyType: $Enums.StoryType | null
   order: number | null
 }
@@ -54,6 +60,9 @@ export type StoryCountAggregateOutputType = {
   id: number
   islandId: number
   title: number
+  subtitle: number
+  coverImage: number
+  backgroundImage: number
   storyType: number
   order: number
   _all: number
@@ -72,6 +81,9 @@ export type StoryMinAggregateInputType = {
   id?: true
   islandId?: true
   title?: true
+  subtitle?: true
+  coverImage?: true
+  backgroundImage?: true
   storyType?: true
   order?: true
 }
@@ -80,6 +92,9 @@ export type StoryMaxAggregateInputType = {
   id?: true
   islandId?: true
   title?: true
+  subtitle?: true
+  coverImage?: true
+  backgroundImage?: true
   storyType?: true
   order?: true
 }
@@ -88,6 +103,9 @@ export type StoryCountAggregateInputType = {
   id?: true
   islandId?: true
   title?: true
+  subtitle?: true
+  coverImage?: true
+  backgroundImage?: true
   storyType?: true
   order?: true
   _all?: true
@@ -183,6 +201,9 @@ export type StoryGroupByOutputType = {
   id: string
   islandId: string
   title: string
+  subtitle: string | null
+  coverImage: string | null
+  backgroundImage: string | null
   storyType: $Enums.StoryType
   order: number
   _count: StoryCountAggregateOutputType | null
@@ -214,6 +235,9 @@ export type StoryWhereInput = {
   id?: Prisma.StringFilter<"Story"> | string
   islandId?: Prisma.StringFilter<"Story"> | string
   title?: Prisma.StringFilter<"Story"> | string
+  subtitle?: Prisma.StringNullableFilter<"Story"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Story"> | string | null
+  backgroundImage?: Prisma.StringNullableFilter<"Story"> | string | null
   storyType?: Prisma.EnumStoryTypeFilter<"Story"> | $Enums.StoryType
   order?: Prisma.IntFilter<"Story"> | number
   island?: Prisma.XOR<Prisma.IslandScalarRelationFilter, Prisma.IslandWhereInput>
@@ -227,6 +251,9 @@ export type StoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   islandId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   storyType?: Prisma.SortOrder
   order?: Prisma.SortOrder
   island?: Prisma.IslandOrderByWithRelationInput
@@ -243,6 +270,9 @@ export type StoryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.StoryWhereInput | Prisma.StoryWhereInput[]
   islandId?: Prisma.StringFilter<"Story"> | string
   title?: Prisma.StringFilter<"Story"> | string
+  subtitle?: Prisma.StringNullableFilter<"Story"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Story"> | string | null
+  backgroundImage?: Prisma.StringNullableFilter<"Story"> | string | null
   storyType?: Prisma.EnumStoryTypeFilter<"Story"> | $Enums.StoryType
   order?: Prisma.IntFilter<"Story"> | number
   island?: Prisma.XOR<Prisma.IslandScalarRelationFilter, Prisma.IslandWhereInput>
@@ -256,6 +286,9 @@ export type StoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   islandId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrderInput | Prisma.SortOrder
   storyType?: Prisma.SortOrder
   order?: Prisma.SortOrder
   _count?: Prisma.StoryCountOrderByAggregateInput
@@ -272,6 +305,9 @@ export type StoryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Story"> | string
   islandId?: Prisma.StringWithAggregatesFilter<"Story"> | string
   title?: Prisma.StringWithAggregatesFilter<"Story"> | string
+  subtitle?: Prisma.StringNullableWithAggregatesFilter<"Story"> | string | null
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Story"> | string | null
+  backgroundImage?: Prisma.StringNullableWithAggregatesFilter<"Story"> | string | null
   storyType?: Prisma.EnumStoryTypeWithAggregatesFilter<"Story"> | $Enums.StoryType
   order?: Prisma.IntWithAggregatesFilter<"Story"> | number
 }
@@ -279,6 +315,9 @@ export type StoryScalarWhereWithAggregatesInput = {
 export type StoryCreateInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   island: Prisma.IslandCreateNestedOneWithoutStoriesInput
@@ -292,6 +331,9 @@ export type StoryUncheckedCreateInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -303,6 +345,9 @@ export type StoryUncheckedCreateInput = {
 export type StoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutStoriesNestedInput
@@ -316,6 +361,9 @@ export type StoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -328,6 +376,9 @@ export type StoryCreateManyInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
 }
@@ -335,6 +386,9 @@ export type StoryCreateManyInput = {
 export type StoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -343,6 +397,9 @@ export type StoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -366,6 +423,9 @@ export type StoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
   storyType?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
@@ -378,6 +438,9 @@ export type StoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
   storyType?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
@@ -386,6 +449,9 @@ export type StoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   islandId?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  subtitle?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  backgroundImage?: Prisma.SortOrder
   storyType?: Prisma.SortOrder
   order?: Prisma.SortOrder
 }
@@ -499,6 +565,9 @@ export type StoryUpdateOneRequiredWithoutInteractiveSlidesNestedInput = {
 export type StoryCreateWithoutStoryAttemptsInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   island: Prisma.IslandCreateNestedOneWithoutStoriesInput
@@ -511,6 +580,9 @@ export type StoryUncheckedCreateWithoutStoryAttemptsInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -537,6 +609,9 @@ export type StoryUpdateToOneWithWhereWithoutStoryAttemptsInput = {
 export type StoryUpdateWithoutStoryAttemptsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutStoriesNestedInput
@@ -549,6 +624,9 @@ export type StoryUncheckedUpdateWithoutStoryAttemptsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -559,6 +637,9 @@ export type StoryUncheckedUpdateWithoutStoryAttemptsInput = {
 export type StoryCreateWithoutIslandInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideCreateNestedManyWithoutStoryInput
@@ -570,6 +651,9 @@ export type StoryCreateWithoutIslandInput = {
 export type StoryUncheckedCreateWithoutIslandInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -611,6 +695,9 @@ export type StoryScalarWhereInput = {
   id?: Prisma.StringFilter<"Story"> | string
   islandId?: Prisma.StringFilter<"Story"> | string
   title?: Prisma.StringFilter<"Story"> | string
+  subtitle?: Prisma.StringNullableFilter<"Story"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"Story"> | string | null
+  backgroundImage?: Prisma.StringNullableFilter<"Story"> | string | null
   storyType?: Prisma.EnumStoryTypeFilter<"Story"> | $Enums.StoryType
   order?: Prisma.IntFilter<"Story"> | number
 }
@@ -618,6 +705,9 @@ export type StoryScalarWhereInput = {
 export type StoryCreateWithoutQuestionsInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   island: Prisma.IslandCreateNestedOneWithoutStoriesInput
@@ -630,6 +720,9 @@ export type StoryUncheckedCreateWithoutQuestionsInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -656,6 +749,9 @@ export type StoryUpdateToOneWithWhereWithoutQuestionsInput = {
 export type StoryUpdateWithoutQuestionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutStoriesNestedInput
@@ -668,6 +764,9 @@ export type StoryUncheckedUpdateWithoutQuestionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -678,6 +777,9 @@ export type StoryUncheckedUpdateWithoutQuestionsInput = {
 export type StoryCreateWithoutStaticSlidesInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   island: Prisma.IslandCreateNestedOneWithoutStoriesInput
@@ -690,6 +792,9 @@ export type StoryUncheckedCreateWithoutStaticSlidesInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   interactiveSlides?: Prisma.InteractiveSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -716,6 +821,9 @@ export type StoryUpdateToOneWithWhereWithoutStaticSlidesInput = {
 export type StoryUpdateWithoutStaticSlidesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutStoriesNestedInput
@@ -728,6 +836,9 @@ export type StoryUncheckedUpdateWithoutStaticSlidesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   interactiveSlides?: Prisma.InteractiveSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -738,6 +849,9 @@ export type StoryUncheckedUpdateWithoutStaticSlidesInput = {
 export type StoryCreateWithoutInteractiveSlidesInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   island: Prisma.IslandCreateNestedOneWithoutStoriesInput
@@ -750,6 +864,9 @@ export type StoryUncheckedCreateWithoutInteractiveSlidesInput = {
   id?: string
   islandId: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
   staticSlides?: Prisma.StaticSlideUncheckedCreateNestedManyWithoutStoryInput
@@ -776,6 +893,9 @@ export type StoryUpdateToOneWithWhereWithoutInteractiveSlidesInput = {
 export type StoryUpdateWithoutInteractiveSlidesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutStoriesNestedInput
@@ -788,6 +908,9 @@ export type StoryUncheckedUpdateWithoutInteractiveSlidesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -798,6 +921,9 @@ export type StoryUncheckedUpdateWithoutInteractiveSlidesInput = {
 export type StoryCreateManyIslandInput = {
   id?: string
   title: string
+  subtitle?: string | null
+  coverImage?: string | null
+  backgroundImage?: string | null
   storyType: $Enums.StoryType
   order?: number
 }
@@ -805,6 +931,9 @@ export type StoryCreateManyIslandInput = {
 export type StoryUpdateWithoutIslandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUpdateManyWithoutStoryNestedInput
@@ -816,6 +945,9 @@ export type StoryUpdateWithoutIslandInput = {
 export type StoryUncheckedUpdateWithoutIslandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
   staticSlides?: Prisma.StaticSlideUncheckedUpdateManyWithoutStoryNestedInput
@@ -827,6 +959,9 @@ export type StoryUncheckedUpdateWithoutIslandInput = {
 export type StoryUncheckedUpdateManyWithoutIslandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  backgroundImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storyType?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   order?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -893,6 +1028,9 @@ export type StorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   islandId?: boolean
   title?: boolean
+  subtitle?: boolean
+  coverImage?: boolean
+  backgroundImage?: boolean
   storyType?: boolean
   order?: boolean
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
@@ -907,6 +1045,9 @@ export type StorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   islandId?: boolean
   title?: boolean
+  subtitle?: boolean
+  coverImage?: boolean
+  backgroundImage?: boolean
   storyType?: boolean
   order?: boolean
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
@@ -916,6 +1057,9 @@ export type StorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   islandId?: boolean
   title?: boolean
+  subtitle?: boolean
+  coverImage?: boolean
+  backgroundImage?: boolean
   storyType?: boolean
   order?: boolean
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
@@ -925,11 +1069,14 @@ export type StorySelectScalar = {
   id?: boolean
   islandId?: boolean
   title?: boolean
+  subtitle?: boolean
+  coverImage?: boolean
+  backgroundImage?: boolean
   storyType?: boolean
   order?: boolean
 }
 
-export type StoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "islandId" | "title" | "storyType" | "order", ExtArgs["result"]["story"]>
+export type StoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "islandId" | "title" | "subtitle" | "coverImage" | "backgroundImage" | "storyType" | "order", ExtArgs["result"]["story"]>
 export type StoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
   staticSlides?: boolean | Prisma.Story$staticSlidesArgs<ExtArgs>
@@ -958,6 +1105,9 @@ export type $StoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     islandId: string
     title: string
+    subtitle: string | null
+    coverImage: string | null
+    backgroundImage: string | null
     storyType: $Enums.StoryType
     order: number
   }, ExtArgs["result"]["story"]>
@@ -1391,6 +1541,9 @@ export interface StoryFieldRefs {
   readonly id: Prisma.FieldRef<"Story", 'String'>
   readonly islandId: Prisma.FieldRef<"Story", 'String'>
   readonly title: Prisma.FieldRef<"Story", 'String'>
+  readonly subtitle: Prisma.FieldRef<"Story", 'String'>
+  readonly coverImage: Prisma.FieldRef<"Story", 'String'>
+  readonly backgroundImage: Prisma.FieldRef<"Story", 'String'>
   readonly storyType: Prisma.FieldRef<"Story", 'StoryType'>
   readonly order: Prisma.FieldRef<"Story", 'Int'>
 }

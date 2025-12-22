@@ -1,7 +1,8 @@
 /**
  * Service layer for Questions domain
  */
-import type {
+import {
+  Prisma,
   Question,
   StageType,
   QuestionType,
@@ -113,6 +114,7 @@ export async function createQuestion(data: {
   questionType: QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.InputJsonValue
   answerOptions?: { optionText: string; isCorrect?: boolean }[]
 }) {
   return prisma.question.create({
@@ -122,6 +124,7 @@ export async function createQuestion(data: {
       questionType: data.questionType,
       questionText: data.questionText,
       xpValue: data.xpValue ?? 0,
+      metadata: data.metadata,
       answerOptions: data.answerOptions
         ? {
             create: data.answerOptions.map((opt) => ({
@@ -147,6 +150,7 @@ export async function updateQuestion(
     questionType?: QuestionType
     questionText?: string
     xpValue?: number
+    metadata?: Prisma.InputJsonValue
   }
 ) {
   return prisma.question.update({

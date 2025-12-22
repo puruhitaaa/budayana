@@ -36,6 +36,7 @@ export const QuestionSchema = t.Object({
   questionType: QuestionTypeEnum,
   questionText: t.String(),
   xpValue: t.Number(),
+  metadata: t.Optional(t.Any()),
 })
 
 // Question with relations
@@ -51,6 +52,7 @@ export const CreateQuestionSchema = t.Object({
   questionType: QuestionTypeEnum,
   questionText: t.String({ minLength: 1 }),
   xpValue: t.Optional(t.Number({ minimum: 0, default: 0 })),
+  metadata: t.Optional(t.Any()),
   answerOptions: t.Optional(
     t.Array(
       t.Object({
@@ -68,6 +70,7 @@ export const UpdateQuestionSchema = t.Partial(
     questionType: QuestionTypeEnum,
     questionText: t.String({ minLength: 1 }),
     xpValue: t.Number({ minimum: 0 }),
+    metadata: t.Optional(t.Any()),
   })
 )
 

@@ -13,9 +13,12 @@ export const StoryTypeEnum = t.Union([
   t.Literal("INTERACTIVE"),
 ])
 export const SlideTypeEnum = t.Union([
+  t.Literal("COVER"),
+  t.Literal("CONTENT"),
   t.Literal("IMAGE"),
   t.Literal("GAME"),
   t.Literal("ESSAY"),
+  t.Literal("ENDING"),
 ])
 
 // Base Story schema
@@ -23,6 +26,9 @@ export const StorySchema = t.Object({
   id: t.String(),
   islandId: t.String(),
   title: t.String(),
+  subtitle: t.Nullable(t.String()),
+  coverImage: t.Nullable(t.String()),
+  backgroundImage: t.Nullable(t.String()),
   storyType: StoryTypeEnum,
   order: t.Number(),
 })
@@ -32,6 +38,7 @@ export const StaticSlideSchema = t.Object({
   id: t.String(),
   storyId: t.String(),
   slideNumber: t.Number(),
+  slideType: SlideTypeEnum,
   contentText: t.Nullable(t.String()),
   imageUrl: t.Nullable(t.String()),
 })
@@ -64,6 +71,9 @@ export const StoryWithSlidesSchema = t.Object({
 export const CreateStorySchema = t.Object({
   islandId: t.String(),
   title: t.String({ minLength: 1, maxLength: 200 }),
+  subtitle: t.Optional(t.String()),
+  coverImage: t.Optional(t.String()),
+  backgroundImage: t.Optional(t.String()),
   storyType: StoryTypeEnum,
 })
 
@@ -71,6 +81,9 @@ export const CreateStorySchema = t.Object({
 export const UpdateStorySchema = t.Partial(
   t.Object({
     title: t.String({ minLength: 1, maxLength: 200 }),
+    subtitle: t.String(),
+    coverImage: t.String(),
+    backgroundImage: t.String(),
     storyType: StoryTypeEnum,
   })
 )
@@ -87,6 +100,7 @@ export const StoryQuerySchema = t.Composite([
 // Create Static Slide input
 export const CreateStaticSlideSchema = t.Object({
   slideNumber: t.Number({ minimum: 0 }),
+  slideType: SlideTypeEnum,
   contentText: t.Optional(t.String()),
   imageUrl: t.Optional(t.String()),
 })

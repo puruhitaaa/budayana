@@ -491,10 +491,6 @@ export type InteractiveSlideUncheckedUpdateManyWithoutStoryNestedInput = {
   deleteMany?: Prisma.InteractiveSlideScalarWhereInput | Prisma.InteractiveSlideScalarWhereInput[]
 }
 
-export type EnumSlideTypeFieldUpdateOperationsInput = {
-  set?: $Enums.SlideType
-}
-
 export type InteractiveSlideCreateWithoutQuestionInput = {
   id?: string
   slideNumber: number

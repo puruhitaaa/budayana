@@ -46,9 +46,12 @@ export type StoryType = (typeof StoryType)[keyof typeof StoryType]
 
 
 export const SlideType = {
+  COVER: 'COVER',
+  CONTENT: 'CONTENT',
   IMAGE: 'IMAGE',
   GAME: 'GAME',
-  ESSAY: 'ESSAY'
+  ESSAY: 'ESSAY',
+  ENDING: 'ENDING'
 } as const
 
 export type SlideType = (typeof SlideType)[keyof typeof SlideType]

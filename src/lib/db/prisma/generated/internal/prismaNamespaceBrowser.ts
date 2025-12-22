@@ -217,7 +217,8 @@ export const QuestionScalarFieldEnum = {
   stageType: 'stageType',
   questionType: 'questionType',
   questionText: 'questionText',
-  xpValue: 'xpValue'
+  xpValue: 'xpValue',
+  metadata: 'metadata'
 } as const
 
 export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
@@ -237,6 +238,9 @@ export const StoryScalarFieldEnum = {
   id: 'id',
   islandId: 'islandId',
   title: 'title',
+  subtitle: 'subtitle',
+  coverImage: 'coverImage',
+  backgroundImage: 'backgroundImage',
   storyType: 'storyType',
   order: 'order'
 } as const
@@ -248,8 +252,9 @@ export const StaticSlideScalarFieldEnum = {
   id: 'id',
   storyId: 'storyId',
   slideNumber: 'slideNumber',
-  contentText: 'contentText',
-  imageUrl: 'imageUrl'
+  slideType: 'slideType',
+  imageUrl: 'imageUrl',
+  contentText: 'contentText'
 } as const
 
 export type StaticSlideScalarFieldEnum = (typeof StaticSlideScalarFieldEnum)[keyof typeof StaticSlideScalarFieldEnum]
@@ -276,6 +281,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -290,4 +303,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

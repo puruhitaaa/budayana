@@ -80,6 +80,9 @@ export async function getStoryById(id: string, includeSlides = true) {
 export async function createStory(data: {
   islandId: string
   title: string
+  subtitle?: string
+  coverImage?: string
+  backgroundImage?: string
   storyType: StoryType
 }) {
   return prisma.story.create({
@@ -94,6 +97,9 @@ export async function updateStory(
   id: string,
   data: {
     title?: string
+    subtitle?: string
+    coverImage?: string
+    backgroundImage?: string
     storyType?: StoryType
   }
 ) {
@@ -130,6 +136,7 @@ export async function createStaticSlide(
   data: {
     slideNumber: number
     contentText?: string
+    slideType: SlideType
     imageUrl?: string
   }
 ) {
@@ -137,6 +144,7 @@ export async function createStaticSlide(
     data: {
       storyId,
       slideNumber: data.slideNumber,
+      slideType: data.slideType,
       contentText: data.contentText,
       imageUrl: data.imageUrl,
     },

@@ -59,6 +59,7 @@ export type QuestionCountAggregateOutputType = {
   questionType: number
   questionText: number
   xpValue: number
+  metadata: number
   _all: number
 }
 
@@ -96,6 +97,7 @@ export type QuestionCountAggregateInputType = {
   questionType?: true
   questionText?: true
   xpValue?: true
+  metadata?: true
   _all?: true
 }
 
@@ -192,6 +194,7 @@ export type QuestionGroupByOutputType = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue: number
+  metadata: runtime.JsonValue | null
   _count: QuestionCountAggregateOutputType | null
   _avg: QuestionAvgAggregateOutputType | null
   _sum: QuestionSumAggregateOutputType | null
@@ -224,6 +227,7 @@ export type QuestionWhereInput = {
   questionType?: Prisma.EnumQuestionTypeFilter<"Question"> | $Enums.QuestionType
   questionText?: Prisma.StringFilter<"Question"> | string
   xpValue?: Prisma.IntFilter<"Question"> | number
+  metadata?: Prisma.JsonNullableFilter<"Question">
   story?: Prisma.XOR<Prisma.StoryScalarRelationFilter, Prisma.StoryWhereInput>
   answerOptions?: Prisma.AnswerOptionListRelationFilter
   interactiveSlides?: Prisma.InteractiveSlideListRelationFilter
@@ -237,6 +241,7 @@ export type QuestionOrderByWithRelationInput = {
   questionType?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   xpValue?: Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   story?: Prisma.StoryOrderByWithRelationInput
   answerOptions?: Prisma.AnswerOptionOrderByRelationAggregateInput
   interactiveSlides?: Prisma.InteractiveSlideOrderByRelationAggregateInput
@@ -253,6 +258,7 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   questionType?: Prisma.EnumQuestionTypeFilter<"Question"> | $Enums.QuestionType
   questionText?: Prisma.StringFilter<"Question"> | string
   xpValue?: Prisma.IntFilter<"Question"> | number
+  metadata?: Prisma.JsonNullableFilter<"Question">
   story?: Prisma.XOR<Prisma.StoryScalarRelationFilter, Prisma.StoryWhereInput>
   answerOptions?: Prisma.AnswerOptionListRelationFilter
   interactiveSlides?: Prisma.InteractiveSlideListRelationFilter
@@ -266,6 +272,7 @@ export type QuestionOrderByWithAggregationInput = {
   questionType?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   xpValue?: Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.QuestionCountOrderByAggregateInput
   _avg?: Prisma.QuestionAvgOrderByAggregateInput
   _max?: Prisma.QuestionMaxOrderByAggregateInput
@@ -283,6 +290,7 @@ export type QuestionScalarWhereWithAggregatesInput = {
   questionType?: Prisma.EnumQuestionTypeWithAggregatesFilter<"Question"> | $Enums.QuestionType
   questionText?: Prisma.StringWithAggregatesFilter<"Question"> | string
   xpValue?: Prisma.IntWithAggregatesFilter<"Question"> | number
+  metadata?: Prisma.JsonNullableWithAggregatesFilter<"Question">
 }
 
 export type QuestionCreateInput = {
@@ -291,6 +299,7 @@ export type QuestionCreateInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story: Prisma.StoryCreateNestedOneWithoutQuestionsInput
   answerOptions?: Prisma.AnswerOptionCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideCreateNestedManyWithoutQuestionInput
@@ -304,6 +313,7 @@ export type QuestionUncheckedCreateInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedCreateNestedManyWithoutQuestionInput
@@ -315,6 +325,7 @@ export type QuestionUpdateInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story?: Prisma.StoryUpdateOneRequiredWithoutQuestionsNestedInput
   answerOptions?: Prisma.AnswerOptionUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUpdateManyWithoutQuestionNestedInput
@@ -328,6 +339,7 @@ export type QuestionUncheckedUpdateInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedUpdateManyWithoutQuestionNestedInput
@@ -340,6 +352,7 @@ export type QuestionCreateManyInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type QuestionUpdateManyMutationInput = {
@@ -348,6 +361,7 @@ export type QuestionUpdateManyMutationInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type QuestionUncheckedUpdateManyInput = {
@@ -357,6 +371,7 @@ export type QuestionUncheckedUpdateManyInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type QuestionScalarRelationFilter = {
@@ -371,6 +386,7 @@ export type QuestionCountOrderByAggregateInput = {
   questionType?: Prisma.SortOrder
   questionText?: Prisma.SortOrder
   xpValue?: Prisma.SortOrder
+  metadata?: Prisma.SortOrder
 }
 
 export type QuestionAvgOrderByAggregateInput = {
@@ -514,6 +530,7 @@ export type QuestionCreateWithoutAttemptLogsInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story: Prisma.StoryCreateNestedOneWithoutQuestionsInput
   answerOptions?: Prisma.AnswerOptionCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideCreateNestedManyWithoutQuestionInput
@@ -526,6 +543,7 @@ export type QuestionUncheckedCreateWithoutAttemptLogsInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedCreateNestedManyWithoutQuestionInput
 }
@@ -552,6 +570,7 @@ export type QuestionUpdateWithoutAttemptLogsInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story?: Prisma.StoryUpdateOneRequiredWithoutQuestionsNestedInput
   answerOptions?: Prisma.AnswerOptionUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUpdateManyWithoutQuestionNestedInput
@@ -564,6 +583,7 @@ export type QuestionUncheckedUpdateWithoutAttemptLogsInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedUpdateManyWithoutQuestionNestedInput
 }
@@ -574,6 +594,7 @@ export type QuestionCreateWithoutAnswerOptionsInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story: Prisma.StoryCreateNestedOneWithoutQuestionsInput
   interactiveSlides?: Prisma.InteractiveSlideCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogCreateNestedManyWithoutQuestionInput
@@ -586,6 +607,7 @@ export type QuestionUncheckedCreateWithoutAnswerOptionsInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   interactiveSlides?: Prisma.InteractiveSlideUncheckedCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedCreateNestedManyWithoutQuestionInput
 }
@@ -612,6 +634,7 @@ export type QuestionUpdateWithoutAnswerOptionsInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story?: Prisma.StoryUpdateOneRequiredWithoutQuestionsNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUpdateManyWithoutQuestionNestedInput
@@ -624,6 +647,7 @@ export type QuestionUncheckedUpdateWithoutAnswerOptionsInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   interactiveSlides?: Prisma.InteractiveSlideUncheckedUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedUpdateManyWithoutQuestionNestedInput
 }
@@ -634,6 +658,7 @@ export type QuestionCreateWithoutStoryInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogCreateNestedManyWithoutQuestionInput
@@ -645,6 +670,7 @@ export type QuestionUncheckedCreateWithoutStoryInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedCreateNestedManyWithoutQuestionInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedCreateNestedManyWithoutQuestionInput
@@ -686,6 +712,7 @@ export type QuestionScalarWhereInput = {
   questionType?: Prisma.EnumQuestionTypeFilter<"Question"> | $Enums.QuestionType
   questionText?: Prisma.StringFilter<"Question"> | string
   xpValue?: Prisma.IntFilter<"Question"> | number
+  metadata?: Prisma.JsonNullableFilter<"Question">
 }
 
 export type QuestionCreateWithoutInteractiveSlidesInput = {
@@ -694,6 +721,7 @@ export type QuestionCreateWithoutInteractiveSlidesInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story: Prisma.StoryCreateNestedOneWithoutQuestionsInput
   answerOptions?: Prisma.AnswerOptionCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogCreateNestedManyWithoutQuestionInput
@@ -706,6 +734,7 @@ export type QuestionUncheckedCreateWithoutInteractiveSlidesInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedCreateNestedManyWithoutQuestionInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedCreateNestedManyWithoutQuestionInput
 }
@@ -732,6 +761,7 @@ export type QuestionUpdateWithoutInteractiveSlidesInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   story?: Prisma.StoryUpdateOneRequiredWithoutQuestionsNestedInput
   answerOptions?: Prisma.AnswerOptionUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUpdateManyWithoutQuestionNestedInput
@@ -744,6 +774,7 @@ export type QuestionUncheckedUpdateWithoutInteractiveSlidesInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedUpdateManyWithoutQuestionNestedInput
 }
@@ -754,6 +785,7 @@ export type QuestionCreateManyStoryInput = {
   questionType: $Enums.QuestionType
   questionText: string
   xpValue?: number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type QuestionUpdateWithoutStoryInput = {
@@ -762,6 +794,7 @@ export type QuestionUpdateWithoutStoryInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUpdateManyWithoutQuestionNestedInput
@@ -773,6 +806,7 @@ export type QuestionUncheckedUpdateWithoutStoryInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   answerOptions?: Prisma.AnswerOptionUncheckedUpdateManyWithoutQuestionNestedInput
   interactiveSlides?: Prisma.InteractiveSlideUncheckedUpdateManyWithoutQuestionNestedInput
   attemptLogs?: Prisma.QuestionAttemptLogUncheckedUpdateManyWithoutQuestionNestedInput
@@ -784,6 +818,7 @@ export type QuestionUncheckedUpdateManyWithoutStoryInput = {
   questionType?: Prisma.EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
   questionText?: Prisma.StringFieldUpdateOperationsInput | string
   xpValue?: Prisma.IntFieldUpdateOperationsInput | number
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -842,6 +877,7 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   questionType?: boolean
   questionText?: boolean
   xpValue?: boolean
+  metadata?: boolean
   story?: boolean | Prisma.StoryDefaultArgs<ExtArgs>
   answerOptions?: boolean | Prisma.Question$answerOptionsArgs<ExtArgs>
   interactiveSlides?: boolean | Prisma.Question$interactiveSlidesArgs<ExtArgs>
@@ -856,6 +892,7 @@ export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   questionType?: boolean
   questionText?: boolean
   xpValue?: boolean
+  metadata?: boolean
   story?: boolean | Prisma.StoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
@@ -866,6 +903,7 @@ export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   questionType?: boolean
   questionText?: boolean
   xpValue?: boolean
+  metadata?: boolean
   story?: boolean | Prisma.StoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
@@ -876,9 +914,10 @@ export type QuestionSelectScalar = {
   questionType?: boolean
   questionText?: boolean
   xpValue?: boolean
+  metadata?: boolean
 }
 
-export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storyId" | "stageType" | "questionType" | "questionText" | "xpValue", ExtArgs["result"]["question"]>
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storyId" | "stageType" | "questionType" | "questionText" | "xpValue" | "metadata", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   story?: boolean | Prisma.StoryDefaultArgs<ExtArgs>
   answerOptions?: boolean | Prisma.Question$answerOptionsArgs<ExtArgs>
@@ -908,6 +947,7 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     questionType: $Enums.QuestionType
     questionText: string
     xpValue: number
+    metadata: runtime.JsonValue | null
   }, ExtArgs["result"]["question"]>
   composites: {}
 }
@@ -1341,6 +1381,7 @@ export interface QuestionFieldRefs {
   readonly questionType: Prisma.FieldRef<"Question", 'QuestionType'>
   readonly questionText: Prisma.FieldRef<"Question", 'String'>
   readonly xpValue: Prisma.FieldRef<"Question", 'Int'>
+  readonly metadata: Prisma.FieldRef<"Question", 'Json'>
 }
     
 

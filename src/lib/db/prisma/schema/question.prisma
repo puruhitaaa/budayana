@@ -18,8 +18,9 @@ model Question {
   questionType QuestionType
   questionText String
   xpValue      Int          @default(0)
+  metadata     Json?
 
-  story             Story               @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  story             Story                @relation(fields: [storyId], references: [id], onDelete: Cascade)
   answerOptions     AnswerOption[]
   interactiveSlides InteractiveSlide[]
   attemptLogs       QuestionAttemptLog[]

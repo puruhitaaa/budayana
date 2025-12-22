@@ -4,17 +4,23 @@ enum StoryType {
 }
 
 enum SlideType {
+  COVER
+  CONTENT
   IMAGE
   GAME
   ESSAY
+  ENDING
 }
 
 model Story {
-  id        String    @id @default(cuid())
-  islandId  String
-  title     String
-  storyType StoryType
-  order     Int       @default(0)
+  id              String    @id @default(cuid())
+  islandId        String
+  title           String
+  subtitle        String?
+  coverImage      String?
+  backgroundImage String?
+  storyType       StoryType
+  order           Int       @default(0)
 
   island            Island             @relation(fields: [islandId], references: [id], onDelete: Cascade)
   staticSlides      StaticSlide[]
@@ -26,12 +32,14 @@ model Story {
   @@map("stories")
 }
 
+// Static Story/Read mode
 model StaticSlide {
-  id          String  @id @default(cuid())
+  id          String    @id @default(cuid())
   storyId     String
   slideNumber Int
-  contentText String?
+  slideType   SlideType
   imageUrl    String?
+  contentText String?
 
   story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
 
@@ -39,6 +47,7 @@ model StaticSlide {
   @@map("static_slide")
 }
 
+// Interactive Story/Game mode
 model InteractiveSlide {
   id          String    @id @default(cuid())
   storyId     String
