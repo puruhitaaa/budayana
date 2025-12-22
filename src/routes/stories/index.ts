@@ -16,7 +16,7 @@ import {
   CreateStaticSlideSchema,
   CreateInteractiveSlideSchema,
   StaticSlideSchema,
-  InteractiveSlideSchema,
+  InteractiveSlideBaseSchema,
 } from "./schema"
 import * as storyService from "./service"
 
@@ -203,7 +203,7 @@ export const storyRoutes = new Elysia({ prefix: "/stories" })
       params: t.Object({ id: t.String() }),
       body: CreateInteractiveSlideSchema,
       response: {
-        200: InteractiveSlideSchema,
+        200: InteractiveSlideBaseSchema,
         404: ErrorResponseSchema,
       },
       detail: {

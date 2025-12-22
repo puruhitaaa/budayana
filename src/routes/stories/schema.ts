@@ -59,7 +59,18 @@ export const QuestionSchema = t.Object({
   answerOptions: t.Array(AnswerOptionSchema),
 })
 
-// Interactive Slide schema (with nested question for game slides)
+// Interactive Slide base schema (for create/update responses)
+export const InteractiveSlideBaseSchema = t.Object({
+  id: t.String(),
+  storyId: t.String(),
+  questionId: t.Nullable(t.String()),
+  slideNumber: t.Number(),
+  slideType: SlideTypeEnum,
+  imageUrl: t.Nullable(t.String()),
+  contentText: t.Nullable(t.String()),
+})
+
+// Interactive Slide schema with question (for GET story response)
 export const InteractiveSlideSchema = t.Object({
   id: t.String(),
   storyId: t.String(),
@@ -68,7 +79,7 @@ export const InteractiveSlideSchema = t.Object({
   slideType: SlideTypeEnum,
   imageUrl: t.Nullable(t.String()),
   contentText: t.Nullable(t.String()),
-  question: t.Nullable(QuestionSchema),
+  question: t.Optional(t.Nullable(QuestionSchema)),
 })
 
 // Story with relations
