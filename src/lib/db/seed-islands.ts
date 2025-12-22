@@ -35,22 +35,22 @@ const islands = [
   {
     islandName: "Kalimantan",
     unlockOrder: 5,
-    isLockedDefault: false,
+    isLockedDefault: true,
   },
   {
     islandName: "Maluku",
     unlockOrder: 6,
-    isLockedDefault: false,
+    isLockedDefault: true,
   },
   {
     islandName: "Bali",
     unlockOrder: 7,
-    isLockedDefault: false,
+    isLockedDefault: true,
   },
   {
     islandName: "Nusa Tenggara",
     unlockOrder: 8,
-    isLockedDefault: false,
+    isLockedDefault: true,
   },
 ]
 
