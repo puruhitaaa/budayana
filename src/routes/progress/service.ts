@@ -163,3 +163,42 @@ export async function initializeUserProgress(userId: string) {
     skipDuplicates: true,
   })
 }
+
+/**
+ * Increment cycle count for a user on an island
+ */
+export async function incrementCycleCount(userId: string, islandId: string) {
+  const existing = await prisma.userProgress.findFirst({
+    where: { userId, islandId },
+  })
+
+  if (existing) {
+    return prisma.userProgress.update({
+      where: { id: existing.id },
+      data: { cycleCount: { increment: 1 } },
+    })
+  }
+
+  return prisma.userProgress.create({
+    data: {
+      userId,
+      islandId,
+      isUnlocked: true,
+      cycleCount: 1,
+    },
+  })
+}
+
+/**
+ * Get cycle count for a user on an island
+ */
+export async function getCycleCount(
+  userId: string,
+  islandId: string
+): Promise<number> {
+  const progress = await prisma.userProgress.findFirst({
+    where: { userId, islandId },
+    select: { cycleCount: true },
+  })
+  return progress?.cycleCount ?? 0
+}

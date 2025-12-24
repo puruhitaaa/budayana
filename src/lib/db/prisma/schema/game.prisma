@@ -17,6 +17,7 @@ model UserProgress {
   islandId    String
   isUnlocked  Boolean @default(false)
   isCompleted Boolean @default(false)
+  cycleCount  Int     @default(0)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   island Island @relation(fields: [islandId], references: [id], onDelete: Cascade)

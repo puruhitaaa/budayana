@@ -6,6 +6,7 @@ import type {
   AttemptStageType,
 } from "../../lib/db/prisma/generated/client"
 import prisma from "../../lib/db"
+import * as progressService from "../progress/service"
 import {
   paginatedQuery,
   type PaginationParams,
@@ -277,10 +278,31 @@ export async function createStageAttempt(
       data: { preTestScore: calculatedScore },
     })
   } else if (data.stageType === "POST_TEST") {
-    await prisma.storyAttempt.update({
+    // Get the attempt with story info
+    const attempt = await prisma.storyAttempt.findUnique({
       where: { id: attemptId },
-      data: { postTestScore: calculatedScore },
+      include: { story: true },
     })
+
+    if (attempt) {
+      await prisma.storyAttempt.update({
+        where: { id: attemptId },
+        data: { postTestScore: calculatedScore },
+      })
+
+      // Check if cycle is complete and increment count
+      const isCycleComplete = await checkCycleCompletion(
+        attempt.userId,
+        attempt.story.islandId
+      )
+
+      if (isCycleComplete) {
+        await progressService.incrementCycleCount(
+          attempt.userId,
+          attempt.story.islandId
+        )
+      }
+    }
   }
 
   return {
@@ -388,4 +410,48 @@ export async function createQuestionLog(
       attemptCount: data.attemptCount ?? 1,
     },
   })
+}
+
+/**
+ * Check if a user has completed all trackable stories in an island
+ * Used to determine if a cycle is complete
+ */
+async function checkCycleCompletion(
+  userId: string,
+  islandId: string
+): Promise<boolean> {
+  // Get all stories in the island with their content
+  const stories = await prisma.story.findMany({
+    where: { islandId },
+    include: {
+      staticSlides: { take: 1 },
+      interactiveSlides: { take: 1 },
+    },
+  })
+
+  // Filter trackable stories
+  const trackableStoryIds = stories
+    .filter((story) => {
+      const isPreTest = /pre[-\s]?test/i.test(story.title)
+      const isPostTest = /post[-\s]?test/i.test(story.title)
+      const hasContent =
+        (story.storyType === "STATIC" && story.staticSlides.length > 0) ||
+        (story.storyType === "INTERACTIVE" &&
+          story.interactiveSlides.length > 0)
+      return isPreTest || isPostTest || hasContent
+    })
+    .map((s) => s.id)
+
+  if (trackableStoryIds.length === 0) return false
+
+  // Check if each trackable story has a finished attempt
+  const finishedCount = await prisma.storyAttempt.count({
+    where: {
+      userId,
+      storyId: { in: trackableStoryIds },
+      finishedAt: { not: null },
+    },
+  })
+
+  return finishedCount >= trackableStoryIds.length
 }

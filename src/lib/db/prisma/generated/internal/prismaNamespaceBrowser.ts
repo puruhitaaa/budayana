@@ -205,7 +205,8 @@ export const UserProgressScalarFieldEnum = {
   userId: 'userId',
   islandId: 'islandId',
   isUnlocked: 'isUnlocked',
-  isCompleted: 'isCompleted'
+  isCompleted: 'isCompleted',
+  cycleCount: 'cycleCount'
 } as const
 
 export type UserProgressScalarFieldEnum = (typeof UserProgressScalarFieldEnum)[keyof typeof UserProgressScalarFieldEnum]

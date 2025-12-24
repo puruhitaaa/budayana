@@ -20,8 +20,18 @@ export type UserProgressModel = runtime.Types.Result.DefaultSelection<Prisma.$Us
 
 export type AggregateUserProgress = {
   _count: UserProgressCountAggregateOutputType | null
+  _avg: UserProgressAvgAggregateOutputType | null
+  _sum: UserProgressSumAggregateOutputType | null
   _min: UserProgressMinAggregateOutputType | null
   _max: UserProgressMaxAggregateOutputType | null
+}
+
+export type UserProgressAvgAggregateOutputType = {
+  cycleCount: number | null
+}
+
+export type UserProgressSumAggregateOutputType = {
+  cycleCount: number | null
 }
 
 export type UserProgressMinAggregateOutputType = {
@@ -30,6 +40,7 @@ export type UserProgressMinAggregateOutputType = {
   islandId: string | null
   isUnlocked: boolean | null
   isCompleted: boolean | null
+  cycleCount: number | null
 }
 
 export type UserProgressMaxAggregateOutputType = {
@@ -38,6 +49,7 @@ export type UserProgressMaxAggregateOutputType = {
   islandId: string | null
   isUnlocked: boolean | null
   isCompleted: boolean | null
+  cycleCount: number | null
 }
 
 export type UserProgressCountAggregateOutputType = {
@@ -46,9 +58,18 @@ export type UserProgressCountAggregateOutputType = {
   islandId: number
   isUnlocked: number
   isCompleted: number
+  cycleCount: number
   _all: number
 }
 
+
+export type UserProgressAvgAggregateInputType = {
+  cycleCount?: true
+}
+
+export type UserProgressSumAggregateInputType = {
+  cycleCount?: true
+}
 
 export type UserProgressMinAggregateInputType = {
   id?: true
@@ -56,6 +77,7 @@ export type UserProgressMinAggregateInputType = {
   islandId?: true
   isUnlocked?: true
   isCompleted?: true
+  cycleCount?: true
 }
 
 export type UserProgressMaxAggregateInputType = {
@@ -64,6 +86,7 @@ export type UserProgressMaxAggregateInputType = {
   islandId?: true
   isUnlocked?: true
   isCompleted?: true
+  cycleCount?: true
 }
 
 export type UserProgressCountAggregateInputType = {
@@ -72,6 +95,7 @@ export type UserProgressCountAggregateInputType = {
   islandId?: true
   isUnlocked?: true
   isCompleted?: true
+  cycleCount?: true
   _all?: true
 }
 
@@ -113,6 +137,18 @@ export type UserProgressAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserProgressAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserProgressSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserProgressMinAggregateInputType
@@ -143,6 +179,8 @@ export type UserProgressGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: UserProgressCountAggregateInputType | true
+  _avg?: UserProgressAvgAggregateInputType
+  _sum?: UserProgressSumAggregateInputType
   _min?: UserProgressMinAggregateInputType
   _max?: UserProgressMaxAggregateInputType
 }
@@ -153,7 +191,10 @@ export type UserProgressGroupByOutputType = {
   islandId: string
   isUnlocked: boolean
   isCompleted: boolean
+  cycleCount: number
   _count: UserProgressCountAggregateOutputType | null
+  _avg: UserProgressAvgAggregateOutputType | null
+  _sum: UserProgressSumAggregateOutputType | null
   _min: UserProgressMinAggregateOutputType | null
   _max: UserProgressMaxAggregateOutputType | null
 }
@@ -182,6 +223,7 @@ export type UserProgressWhereInput = {
   islandId?: Prisma.StringFilter<"UserProgress"> | string
   isUnlocked?: Prisma.BoolFilter<"UserProgress"> | boolean
   isCompleted?: Prisma.BoolFilter<"UserProgress"> | boolean
+  cycleCount?: Prisma.IntFilter<"UserProgress"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   island?: Prisma.XOR<Prisma.IslandScalarRelationFilter, Prisma.IslandWhereInput>
 }
@@ -192,6 +234,7 @@ export type UserProgressOrderByWithRelationInput = {
   islandId?: Prisma.SortOrder
   isUnlocked?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
+  cycleCount?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   island?: Prisma.IslandOrderByWithRelationInput
 }
@@ -205,6 +248,7 @@ export type UserProgressWhereUniqueInput = Prisma.AtLeast<{
   islandId?: Prisma.StringFilter<"UserProgress"> | string
   isUnlocked?: Prisma.BoolFilter<"UserProgress"> | boolean
   isCompleted?: Prisma.BoolFilter<"UserProgress"> | boolean
+  cycleCount?: Prisma.IntFilter<"UserProgress"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   island?: Prisma.XOR<Prisma.IslandScalarRelationFilter, Prisma.IslandWhereInput>
 }, "id">
@@ -215,9 +259,12 @@ export type UserProgressOrderByWithAggregationInput = {
   islandId?: Prisma.SortOrder
   isUnlocked?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
+  cycleCount?: Prisma.SortOrder
   _count?: Prisma.UserProgressCountOrderByAggregateInput
+  _avg?: Prisma.UserProgressAvgOrderByAggregateInput
   _max?: Prisma.UserProgressMaxOrderByAggregateInput
   _min?: Prisma.UserProgressMinOrderByAggregateInput
+  _sum?: Prisma.UserProgressSumOrderByAggregateInput
 }
 
 export type UserProgressScalarWhereWithAggregatesInput = {
@@ -229,12 +276,14 @@ export type UserProgressScalarWhereWithAggregatesInput = {
   islandId?: Prisma.StringWithAggregatesFilter<"UserProgress"> | string
   isUnlocked?: Prisma.BoolWithAggregatesFilter<"UserProgress"> | boolean
   isCompleted?: Prisma.BoolWithAggregatesFilter<"UserProgress"> | boolean
+  cycleCount?: Prisma.IntWithAggregatesFilter<"UserProgress"> | number
 }
 
 export type UserProgressCreateInput = {
   id?: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
   user: Prisma.UserCreateNestedOneWithoutUserProgressInput
   island: Prisma.IslandCreateNestedOneWithoutUserProgressInput
 }
@@ -245,12 +294,14 @@ export type UserProgressUncheckedCreateInput = {
   islandId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutUserProgressNestedInput
   island?: Prisma.IslandUpdateOneRequiredWithoutUserProgressNestedInput
 }
@@ -261,6 +312,7 @@ export type UserProgressUncheckedUpdateInput = {
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressCreateManyInput = {
@@ -269,12 +321,14 @@ export type UserProgressCreateManyInput = {
   islandId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressUncheckedUpdateManyInput = {
@@ -283,6 +337,7 @@ export type UserProgressUncheckedUpdateManyInput = {
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressListRelationFilter = {
@@ -301,6 +356,11 @@ export type UserProgressCountOrderByAggregateInput = {
   islandId?: Prisma.SortOrder
   isUnlocked?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
+  cycleCount?: Prisma.SortOrder
+}
+
+export type UserProgressAvgOrderByAggregateInput = {
+  cycleCount?: Prisma.SortOrder
 }
 
 export type UserProgressMaxOrderByAggregateInput = {
@@ -309,6 +369,7 @@ export type UserProgressMaxOrderByAggregateInput = {
   islandId?: Prisma.SortOrder
   isUnlocked?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
+  cycleCount?: Prisma.SortOrder
 }
 
 export type UserProgressMinOrderByAggregateInput = {
@@ -317,6 +378,11 @@ export type UserProgressMinOrderByAggregateInput = {
   islandId?: Prisma.SortOrder
   isUnlocked?: Prisma.SortOrder
   isCompleted?: Prisma.SortOrder
+  cycleCount?: Prisma.SortOrder
+}
+
+export type UserProgressSumOrderByAggregateInput = {
+  cycleCount?: Prisma.SortOrder
 }
 
 export type UserProgressCreateNestedManyWithoutUserInput = {
@@ -407,6 +473,7 @@ export type UserProgressCreateWithoutUserInput = {
   id?: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
   island: Prisma.IslandCreateNestedOneWithoutUserProgressInput
 }
 
@@ -415,6 +482,7 @@ export type UserProgressUncheckedCreateWithoutUserInput = {
   islandId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressCreateOrConnectWithoutUserInput = {
@@ -452,12 +520,14 @@ export type UserProgressScalarWhereInput = {
   islandId?: Prisma.StringFilter<"UserProgress"> | string
   isUnlocked?: Prisma.BoolFilter<"UserProgress"> | boolean
   isCompleted?: Prisma.BoolFilter<"UserProgress"> | boolean
+  cycleCount?: Prisma.IntFilter<"UserProgress"> | number
 }
 
 export type UserProgressCreateWithoutIslandInput = {
   id?: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
   user: Prisma.UserCreateNestedOneWithoutUserProgressInput
 }
 
@@ -466,6 +536,7 @@ export type UserProgressUncheckedCreateWithoutIslandInput = {
   userId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressCreateOrConnectWithoutIslandInput = {
@@ -499,12 +570,14 @@ export type UserProgressCreateManyUserInput = {
   islandId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
   island?: Prisma.IslandUpdateOneRequiredWithoutUserProgressNestedInput
 }
 
@@ -513,6 +586,7 @@ export type UserProgressUncheckedUpdateWithoutUserInput = {
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressUncheckedUpdateManyWithoutUserInput = {
@@ -520,6 +594,7 @@ export type UserProgressUncheckedUpdateManyWithoutUserInput = {
   islandId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressCreateManyIslandInput = {
@@ -527,12 +602,14 @@ export type UserProgressCreateManyIslandInput = {
   userId: string
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: number
 }
 
 export type UserProgressUpdateWithoutIslandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutUserProgressNestedInput
 }
 
@@ -541,6 +618,7 @@ export type UserProgressUncheckedUpdateWithoutIslandInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserProgressUncheckedUpdateManyWithoutIslandInput = {
@@ -548,6 +626,7 @@ export type UserProgressUncheckedUpdateManyWithoutIslandInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isUnlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  cycleCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -558,6 +637,7 @@ export type UserProgressSelect<ExtArgs extends runtime.Types.Extensions.Internal
   islandId?: boolean
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userProgress"]>
@@ -568,6 +648,7 @@ export type UserProgressSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   islandId?: boolean
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userProgress"]>
@@ -578,6 +659,7 @@ export type UserProgressSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   islandId?: boolean
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userProgress"]>
@@ -588,9 +670,10 @@ export type UserProgressSelectScalar = {
   islandId?: boolean
   isUnlocked?: boolean
   isCompleted?: boolean
+  cycleCount?: boolean
 }
 
-export type UserProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "islandId" | "isUnlocked" | "isCompleted", ExtArgs["result"]["userProgress"]>
+export type UserProgressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "islandId" | "isUnlocked" | "isCompleted" | "cycleCount", ExtArgs["result"]["userProgress"]>
 export type UserProgressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   island?: boolean | Prisma.IslandDefaultArgs<ExtArgs>
@@ -616,6 +699,7 @@ export type $UserProgressPayload<ExtArgs extends runtime.Types.Extensions.Intern
     islandId: string
     isUnlocked: boolean
     isCompleted: boolean
+    cycleCount: number
   }, ExtArgs["result"]["userProgress"]>
   composites: {}
 }
@@ -1046,6 +1130,7 @@ export interface UserProgressFieldRefs {
   readonly islandId: Prisma.FieldRef<"UserProgress", 'String'>
   readonly isUnlocked: Prisma.FieldRef<"UserProgress", 'Boolean'>
   readonly isCompleted: Prisma.FieldRef<"UserProgress", 'Boolean'>
+  readonly cycleCount: Prisma.FieldRef<"UserProgress", 'Int'>
 }
     
 
