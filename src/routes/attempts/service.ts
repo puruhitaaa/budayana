@@ -463,26 +463,32 @@ async function checkCycleCompletion(
   // Filter trackable stories
   const trackableStoryIds = stories
     .filter((story) => {
-      const isPreTest = /pre[-\s]?test/i.test(story.title)
-      const isPostTest = /post[-\s]?test/i.test(story.title)
+      // Only track stories that have actual content (slides)
+      // This prevents empty "ghost" stories or placeholder pre/post tests from blocking cycle completion
       const hasContent =
         (story.storyType === "STATIC" && story.staticSlides.length > 0) ||
         (story.storyType === "INTERACTIVE" &&
           story.interactiveSlides.length > 0)
-      return isPreTest || isPostTest || hasContent
+
+      return hasContent
     })
     .map((s) => s.id)
 
   if (trackableStoryIds.length === 0) return false
 
   // Check if each trackable story has a finished attempt
-  const finishedCount = await prisma.storyAttempt.count({
+  // Use findMany with distinct to ensure we count unique stories, not just total attempts
+  const finishedAttempts = await prisma.storyAttempt.findMany({
     where: {
       userId,
       storyId: { in: trackableStoryIds },
       finishedAt: { not: null },
     },
+    select: {
+      storyId: true,
+    },
+    distinct: ["storyId"],
   })
 
-  return finishedCount >= trackableStoryIds.length
+  return finishedAttempts.length >= trackableStoryIds.length
 }
