@@ -25,7 +25,7 @@ export async function getUserProgress(
   userId: string,
   pagination: PaginationParams,
   filters: ProgressFilters = {}
-): Promise<PaginatedResult<UserProgress>> {
+): Promise<PaginatedResult<UserProgress> & { completedStory: number }> {
   const filterClause = buildWhereClause(
     {
       isUnlocked: filters.isUnlocked,
@@ -36,7 +36,23 @@ export async function getUserProgress(
 
   const where = combineWhereClauses({ userId }, filterClause)
 
-  return paginatedQuery(
+  // Get the count of distinct completed stories
+  const completedStories = await prisma.storyAttempt.findMany({
+    where: {
+      userId,
+      finishedAt: {
+        not: null,
+      },
+    },
+    select: {
+      storyId: true,
+    },
+    distinct: ["storyId"],
+  })
+
+  const completedStory = completedStories.length
+
+  const paginatedResult = await paginatedQuery(
     (options) =>
       prisma.userProgress.findMany({
         ...options,
@@ -57,6 +73,11 @@ export async function getUserProgress(
       defaultSortField: "id",
     }
   )
+
+  return {
+    ...paginatedResult,
+    completedStory,
+  }
 }
 
 /**
