@@ -54,3 +54,8 @@ export const ProgressQuerySchema = t.Composite([
 export const PaginatedProgressSchema = createPaginatedSchema(
   UserProgressWithIslandSchema
 )
+
+// Cycle count response
+export const CycleCountResponseSchema = t.Object({
+  cycleCount: t.Integer(),
+})

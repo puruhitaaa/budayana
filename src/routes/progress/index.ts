@@ -13,6 +13,7 @@ import {
   UpdateProgressSchema,
   PaginatedProgressSchema,
   UserProgressSchema,
+  CycleCountResponseSchema,
 } from "./schema"
 import * as progressService from "./service"
 
@@ -192,6 +193,38 @@ export const progressRoutes = new Elysia({ prefix: "/progress" })
         tags: ["Progress"],
         summary: "Initialize progress",
         description: "Create progress records for all islands",
+      },
+    }
+  )
+
+  /**
+   * GET /api/progress/islands/:islandId/cycles - Get cycle count for island
+   */
+  .get(
+    "/islands/:islandId/cycles",
+    async ({ params, user, set }) => {
+      if (!user) {
+        set.status = 401
+        return { error: "Unauthorized", code: "UNAUTHORIZED" }
+      }
+
+      const cycleCount = await progressService.getCycleCount(
+        user.id,
+        params.islandId
+      )
+
+      return { cycleCount }
+    },
+    {
+      params: t.Object({ islandId: t.String() }),
+      detail: {
+        tags: ["Progress"],
+        summary: "Get cycle count",
+        description: "Get the number of completed cycles for a specific island",
+      },
+      response: {
+        200: CycleCountResponseSchema,
+        401: ErrorResponseSchema,
       },
     }
   )
