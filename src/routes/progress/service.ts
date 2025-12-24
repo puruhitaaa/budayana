@@ -175,7 +175,10 @@ export async function incrementCycleCount(userId: string, islandId: string) {
   if (existing) {
     return prisma.userProgress.update({
       where: { id: existing.id },
-      data: { cycleCount: { increment: 1 } },
+      data: {
+        cycleCount: { increment: 1 },
+        isCompleted: true,
+      },
     })
   }
 
@@ -185,6 +188,7 @@ export async function incrementCycleCount(userId: string, islandId: string) {
       islandId,
       isUnlocked: true,
       cycleCount: 1,
+      isCompleted: true, // Mark as completed
     },
   })
 }
