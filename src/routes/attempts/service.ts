@@ -183,6 +183,21 @@ export async function updateAttempt(
     essayAnswer?: string
   }
 ) {
+  // If totalXpGained is set, increment the user's totalXp
+  if (data.totalXpGained && data.totalXpGained > 0) {
+    const attemptForXp = await prisma.storyAttempt.findUnique({
+      where: { id },
+      select: { userId: true },
+    })
+
+    if (attemptForXp) {
+      await prisma.user.update({
+        where: { id: attemptForXp.userId },
+        data: { totalXp: { increment: data.totalXpGained } },
+      })
+    }
+  }
+
   const attempt = await prisma.storyAttempt.update({
     where: { id },
     data,
@@ -302,6 +317,22 @@ export async function createStageAttempt(
           attempt.story.islandId
         )
       }
+    }
+  }
+
+  // Increment user's totalXp when xpGained > 0
+  const xpToAdd = data.xpGained ?? 0
+  if (xpToAdd > 0) {
+    const attemptForXp = await prisma.storyAttempt.findUnique({
+      where: { id: attemptId },
+      select: { userId: true },
+    })
+
+    if (attemptForXp) {
+      await prisma.user.update({
+        where: { id: attemptForXp.userId },
+        data: { totalXp: { increment: xpToAdd } },
+      })
     }
   }
 
